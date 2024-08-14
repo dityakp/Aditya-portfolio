@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya Kumar Prasad - Portfolio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: #161b22;
+            color: #c9d1d9;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid #30363d;
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin: 0;
+            animation: fadeInDown 2s ease-out;
+        }
+
+        header p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            animation: fadeInUp 2s 0.5s ease-out;
+        }
+
+        section {
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            border-bottom: 2px solid #30363d;
+        }
+
+        section:nth-child(even) {
+            background: #161b22;
+        }
+
+        section:nth-child(odd) {
+            background: #0d1117;
+        }
+
+        section h2 {
+            font-size: 2.5em;
+            color: #58a6ff;
+            margin-bottom: 20px;
+            animation: fadeInUp 2s;
+        }
+
+        section p, section ul {
+            font-size: 1em;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 15px 0;
+            padding: 20px;
+            border-left: 6px solid #58a6ff;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        ul li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            background: #161b22;
+            color: #c9d1d9;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 0 10px;
+            transition: transform 0.3s, filter 0.3s;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
+        .social-icons img {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Aditya Kumar Prasad</h1>
+            <p>Aspiring Blockchain Developer | Cloud | AWS</p>
+        </div>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>I am currently pursuing a Bachelor's degree in Computer Applications (BCA) with a strong foundation in programming languages such as C and C++, along with in-depth knowledge of Data Structures and Algorithms (DSA). I am passionate about blockchain technology and cloud computing.</p>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container">
+            <h2>Education</h2>
+            <ul>
+                <li>Bachelor's in Computer Applications (BCA) - Currently pursuing</li>
+                <li>AWS Certification - In progress</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2>Skills</h2>
+            <ul>
+                <li>Programming Languages: C, C++</li>
+                <li>Data Structures and Algorithms (DSA)</li>
+                <li>Amazon Web Services (AWS)</li>
+                <li>Object-Oriented Programming (OOP) in C++</li>
+                <li>Motion Graphics (Adobe After Effects, Adobe Illustrator)</li>
+                <li>Git and GitHub</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <ul>
+                <li>Apache Web Server Deployment - Deployed on Amazon EC2 instance.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <p>Phone No: <a href="tel:+919162516651">+91 9162516651</a></p>
+            <div class="social-icons">
+                <a href="https://github.com/dityakp" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" alt="GitHub">
+                </a>
+                <a href="https://www.linkedin.com/in/dityakp/" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="LinkedIn">
+                </a>
+                <a href="mailto:aditya22may2004@gmail.com">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/email.png" alt="Email">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Aditya Kumar Prasad. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
