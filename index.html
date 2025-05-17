@@ -3,208 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Aditya Kumar Prasad, an aspiring Blockchain Developer skilled in AWS, C++, and DSA.">
+    <meta name="keywords" content="Aditya Kumar Prasad, Blockchain Developer, AWS, Portfolio">
+    <meta name="author" content="Aditya Kumar Prasad">
     <title>Aditya Kumar Prasad - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
     <style>
+        :root {
+            --primary: #00f0ff;
+            --secondary: #a855f7;
+            --accent: #ff0080;
+            --bg-dark: #0d1117;
+            --bg-light: #f0f2f5;
+            --text-dark: #e0e0e0;
+            --text-light: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-            overflow-x: hidden;
+            background: var(--bg-dark);
+            color: var(--text-dark);
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        header {
-            background: #161b22;
-            color: #c9d1d9;
-            padding: 60px 20px;
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+            background: linear-gradient(180deg, rgba(13, 17, 23, 0.95), rgba(30, 37, 48, 0.95));
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            transform: translateX(-100%);
+            transition: transform 0.4s ease-in-out;
+            z-index: 1000;
+        }
+
+        .navbar.active {
+            transform: translateX(0);
+        }
+
+        body.light-mode .navbar {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(229, 231, 235, 0.95));
+            border-right: 1px solid #d1d5db;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .navbar a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .navbar a:hover {
+            color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1100;
+            cursor: pointer;
+            background: rgba(13, 17, 23, 0.8);
+            padding: 0.6rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        body.light-mode .hamburger {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            background: linear-gradient(135deg, var(--bg-dark), #1c2526);
             position: relative;
-            border-bottom: 2px solid #30363d;
         }
 
-        header h1 {
-            font-size: 3.5em;
-            margin: 0;
-            animation: fadeInDown 2s ease-out;
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
         }
 
-        header p {
-            font-size: 1.2em;
-            margin: 10px 0;
-            animation: fadeInUp 2s 0.5s ease-out;
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 400;
         }
 
-        section {
-            padding: 60px 20px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            border-bottom: 2px solid #30363d;
-        }
-
-        section:nth-child(even) {
-            background: #161b22;
-        }
-
-        section:nth-child(odd) {
-            background: #0d1117;
-        }
-
-        section h2 {
-            font-size: 2.5em;
-            color: #58a6ff;
-            margin-bottom: 20px;
-            animation: fadeInUp 2s;
-        }
-
-        section p, section ul {
-            font-size: 1em;
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
             margin: 0 auto;
-            max-width: 800px;
+            opacity: 0;
         }
 
-        ul {
-            list-style-type: none;
+        .section h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.5s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .card ul {
+            list-style: none;
             padding: 0;
         }
 
-        ul li {
-            margin: 15px 0;
-            padding: 20px;
-            border-left: 6px solid #58a6ff;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        .card li {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
         }
 
-        ul li:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .contact-form button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px var(--accent);
+        }
+
+        .resume-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .resume-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px var(--accent);
         }
 
         footer {
-            background: #161b22;
-            color: #c9d1d9;
+            background: linear-gradient(180deg, rgba(13, 17, 23, 0.95), rgba(30, 37, 48, 0.95));
+            padding: 2rem;
             text-align: center;
-            padding: 20px;
-        }
-
-        footer a {
-            color: #58a6ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        .social-icons {
-            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .social-icons a {
             display: inline-block;
-            width: 40px;
-            height: 40px;
-            margin: 0 10px;
+            margin: 0 0.8rem;
             transition: transform 0.3s, filter 0.3s;
         }
 
         .social-icons a:hover {
             transform: scale(1.2);
-            filter: brightness(1.2);
+            filter: drop-shadow(0 0 8px var(--accent));
         }
 
-        .social-icons img {
-            width: 100%;
-            height: 100%;
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0;
+            z-index: 1200;
+            transition: width 0.3s ease;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .navbar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.3rem;
+            }
+            .section h2 {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Aditya Kumar Prasad</h1>
-            <p>Aspiring Blockchain Developer | Cloud | AWS</p>
-        </div>
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="hamburger" role="button" aria-label="Toggle navigation">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+    </div>
+
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <ul>
+            <li><a href="#about" aria-label="About section">About</a></li>
+            <li><a href="#education" aria-label="Education section">Education</a></li>
+            <li><a href="#skills" aria-label="Skills section">Skills</a></li>
+            <li><a href="#projects" aria-label="Projects section">Projects</a></li>
+            <li><a href="#contact" aria-label="Contact section">Contact</a></li>
+            <li><button id="theme-toggle" class="px-4 py-2 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white rounded hover:from-[var(--secondary)] hover:to-[var(--accent)]" aria-label="Toggle theme">Toggle Theme</button></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1 id="typed-name"></h1>
+        <p id="typed-title"></p>
+        <a href="#resume.pdf" class="resume-btn" download aria-label="Download resume">Download Resume</a>
     </header>
 
-    <section id="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>I am currently pursuing a Bachelor's degree in Computer Applications (BCA) with a strong foundation in programming languages such as C and C++, along with in-depth knowledge of Data Structures and Algorithms (DSA). I am passionate about blockchain technology and cloud computing.</p>
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <div class="card">
+            <p>I am currently pursuing a Bachelor's degree in Computer Applications (BCA) with a strong foundation in programming languages such as C,C++ and Python along with in-depth knowledge of Data Structures and Algorithms (DSA). I am passionate about blockchain technology and cloud computing.</p>
         </div>
     </section>
 
-    <section id="education">
-        <div class="container">
-            <h2>Education</h2>
+    <section id="education" class="section">
+        <h2>Education</h2>
+        <div class="card">
             <ul>
-                <li>Bachelor's in Computer Applications (BCA) - Currently pursuing</li>
-                <li>AWS Certification - In progress</li>
+                <li>Bachelor's in Computer Applications (BCA) - 2023-2026*</li>
+                <li>Intermediate - 2021-2023</li>
+                <li>AWS Certification</li>
             </ul>
         </div>
     </section>
 
-    <section id="skills">
-        <div class="container">
-            <h2>Skills</h2>
-            <ul>
+    <section id="skills" class="section">
+        <h2>Skills</h2>
+        <div class="card">
+            <canvas id="skills-chart" width="400" height="400" aria-label="Skills proficiency radar chart"></canvas>
+            <ul class="fallback-skills" style="display: none;">
                 <li>Programming Languages: C, C++</li>
                 <li>Data Structures and Algorithms (DSA)</li>
-                <li>Amazon Web Services (AWS)</li>
-                <li>Object-Oriented Programming (OOP) in C++</li>
-                <li>Motion Graphics (Adobe After Effects, Adobe Illustrator)</li>
+                <li>Amazon EC2</li>
+                <li>Amazon S3</li>
+                <li>IAM</li>
+                <li>AWS Lambda</li>
                 <li>Git and GitHub</li>
             </ul>
         </div>
     </section>
 
-    <section id="projects">
-        <div class="container">
-            <h2>Projects</h2>
+    <section id="projects" class="section">
+        <h2>Projects</h2>
+        <div class="card">
             <ul>
                 <li>Apache Web Server Deployment - Deployed on Amazon EC2 instance.</li>
             </ul>
         </div>
     </section>
 
-    <section id="contact">
-        <div class="container">
-            <h2>Contact</h2>
-            <p>Phone No: <a href="tel:+919162516651">+91 9162516651</a></p>
-            <div class="social-icons">
-                <a href="https://github.com/dityakp" target="_blank">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" alt="GitHub">
-                </a>
-                <a href="https://www.linkedin.com/in/dityakp/" target="_blank">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="LinkedIn">
-                </a>
-                <a href="mailto:aditya22may2004@gmail.com">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/email.png" alt="Email">
-                </a>
-            </div>
+    <section id="contact" class="section">
+        <h2>Contact</h2>
+        <form class="contact-form" aria-label="Contact form">
+            <input type="text" id="name" placeholder="Your Name" required aria-label="Name">
+            <input type="email" id="email" placeholder="Your Email" required aria-label="Email">
+            <textarea id="message" rows="5" placeholder="Your Message" required aria-label="Message"></textarea>
+            <button type="submit" aria-label="Submit contact form">Send Message</button>
+        </form>
+        <div class="social-icons mt-6">
+            <a href="https://github.com/dityakp" target="_blank" aria-label="GitHub profile">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/github.png" alt="GitHub" width="40" loading="lazy">
+            </a>
+            <a href="https://www.linkedin.com/in/dityakp/" target="_blank" aria-label="LinkedIn profile">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="LinkedIn" width="40" loading="lazy">
+            </a>
+            <a href="mailto:aditya22may2004@gmail.com" aria-label="Email Aditya">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/email.png" alt="Email" width="40" loading="lazy">
+            </a>
         </div>
     </section>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2024 Aditya Kumar Prasad. All rights reserved.</p>
-        </div>
+        <p>© 2025 Aditya Kumar Prasad. All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle
+            const toggleButton = document.getElementById('theme-toggle');
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                toggleButton.textContent = document.body.classList.contains('light-mode') ? 'Dark Mode' : 'Light Mode';
+                localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+            });
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                toggleButton.textContent = 'Dark Mode';
+            }
+
+            // Hamburger Menu
+            const hamburger = document.querySelector('.hamburger');
+            const navbar = document.querySelector('.navbar');
+            hamburger.addEventListener('click', () => {
+                navbar.classList.toggle('active');
+            });
+
+            // Typed.js for Hero
+            if (typeof Typed !== 'undefined') {
+                new Typed('#typed-name', {
+                    strings: ['Aditya Kumar Prasad'],
+                    typeSpeed: 50,
+                    showCursor: false
+                });
+                new Typed('#typed-title', {
+                    strings: ['Aspiring Blockchain Developer', 'Cloud Enthusiast', 'AWS Specialist'],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                    loop: true,
+                    startDelay: 1000
+                });
+            } else {
+                document.getElementById('typed-name').textContent = 'Aditya Kumar Prasad';
+                document.getElementById('typed-title').textContent = 'Aspiring Blockchain Developer';
+            }
+
+            // GSAP Scroll Animations
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('.section').forEach(section => {
+                    gsap.fromTo(section, 
+                        { opacity: 0, y: 100 },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            duration: 1.2, 
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: section,
+                                start: 'top 80%',
+                                toggleActions: 'play none none none'
+                            }
+                        }
+                    );
+                });
+            }
+
+            // Chart.js for Skills Radar
+            if (typeof Chart !== 'undefined') {
+                const ctx = document.getElementById('skills-chart')?.getContext('2d');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['C/C++', 'DSA', 'Amazon EC2', 'Amazon S3', 'IAM', 'AWS Lambda', 'Git'],
+                            datasets: [{
+                                label: 'Skills Proficiency',
+                                data: [85, 80, 75, 75, 70, 70, 85],
+                                backgroundColor: 'rgba(0, 240, 255, 0.2)',
+                                borderColor: 'var(--primary)',
+                                borderWidth: 2,
+                                pointBackgroundColor: 'var(--accent)'
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: { 
+                                    angleLines: { color: 'rgba(255, 255, 255, 0.2)' }, 
+                                    grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                                    suggestedMin: 0,
+                                    suggestedMax: 100
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false }
+                            }
+                        }
+                    });
+                } else {
+                    document.querySelector('.fallback-skills').style.display = 'block';
+                    document.getElementById('skills-chart').style.display = 'none';
+                }
+            } else {
+                document.querySelector('.fallback-skills').style.display = 'block';
+                document.getElementById('skills-chart').style.display = 'none';
+            }
+
+            // Progress Bar
+            const progressBar = document.getElementById('progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            });
+
+            // Contact Form Submission
+            const form = document.querySelector('.contact-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+                if (name && email && message) {
+                    alert('Form submitted successfully! (Note: This is a demo; no backend is implemented.)');
+                    form.reset();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
