@@ -548,6 +548,8 @@
         .terminal-text {
             color: var(--success);
             line-height: 1.8;
+            min-height: 120px; /* Ensure space for text */
+            white-space: pre-wrap;
         }
 
         @media (max-width: 768px) {
@@ -606,10 +608,6 @@
                 transform: scale(4);
                 opacity: 0;
             }
-        }
-
-        .hero-title {
-            position: relative;
         }
 
         .social-link:nth-child(1):hover { box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4); }
@@ -1064,6 +1062,11 @@
 
         function initTerminalEffect() {
             const terminalText = document.querySelector('.terminal-text');
+            if (!terminalText) {
+                console.error('Terminal text element not found');
+                return;
+            }
+
             const lines = [
                 '$ whoami',
                 '> blockchain_enthusiast && cloud_architect',
@@ -1072,40 +1075,51 @@
                 '$ status',
                 '> Currently building the future, one block at a time...'
             ];
-            
+
             let currentLine = 0;
             let currentChar = 0;
-            let isTyping = false;
+            let output = '';
 
             function typeLine() {
                 if (currentLine >= lines.length) return;
-                
-                if (!isTyping) {
-                    isTyping = true;
-                    terminalText.innerHTML += lines[currentLine].substring(0, currentChar + 1) + '<br>';
-                    currentChar++;
-                    
-                    if (currentChar >= lines[currentLine].length) {
-                        currentChar = 0;
-                        currentLine++;
-                        isTyping = false;
-                        setTimeout(typeLine, 500);
-                    } else {
-                        setTimeout(typeLine, 50);
-                    }
+
+                output += lines[currentLine][currentChar];
+                terminalText.textContent = output;
+
+                currentChar++;
+                if (currentChar >= lines[currentLine].length) {
+                    output += '\n';
+                    currentChar = 0;
+                    currentLine++;
+                    setTimeout(typeLine, 500); // Pause between lines
+                } else {
+                    setTimeout(typeLine, 50); // Speed of typing
                 }
             }
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        console.log('Terminal section is visible, starting typing');
                         typeLine();
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.5 });
+            }, { threshold: 0.1 });
 
-            observer.observe(document.querySelector('.terminal'));
+            const terminal = document.querySelector('.terminal');
+            if (terminal) {
+                observer.observe(terminal);
+                // Fallback: Check if already in view on load
+                const rect = terminal.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top <= window.innerHeight * 0.9) {
+                    console.log('Terminal already in view on load, starting typing');
+                    typeLine();
+                    observer.unobserve(terminal);
+                }
+            } else {
+                console.error('Terminal element not found');
+            }
         }
     </script>
 </body>
