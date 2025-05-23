@@ -215,11 +215,32 @@
         }
 
         .hero-avatar svg {
-            width: 80px;
-            height: 80px;
-            fill: var(--primary);
+            width: 90px;
+            height: 90px;
             z-index: 1;
-            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero-avatar svg path {
+            fill: none;
+            stroke: url(#circuitGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: trace 3s ease-in-out infinite;
+        }
+
+        .hero-avatar svg circle {
+            fill: var(--primary);
+            filter: drop-shadow(0 0 5px var(--primary));
+            transform-origin: center;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .hero-avatar:hover svg {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
         }
 
         @keyframes rotate {
@@ -227,10 +248,16 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
+        @keyframes trace {
+            0% { stroke-dashoffset: 200; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -200; }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.7; transform: scale(1); }
         }
 
         .hero-title {
@@ -639,11 +666,18 @@
     <section class="hero">
         <div class="hero-avatar">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke="currentColor" stroke-width="4"/>
-                <line x1="50" y1="30" x2="70" y2="50" stroke="currentColor" stroke-width="4"/>
-                <line x1="50" y1="30" x2="30" y2="50" stroke="currentColor" stroke-width="4"/>
-                <line x1="30" y1="50" x2="70" y2="50" stroke="currentColor" stroke-width="4"/>
-                <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                <defs>
+                    <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: var(--primary); stop-opacity: 1" />
+                        <stop offset="100%" style="stop-color: var(--secondary); stop-opacity: 1" />
+                    </linearGradient>
+                </defs>
+                <path d="M20,80 C30,60 50,40 70,40 S80,60 80,80" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
+                <path d="M30,70 C40,50 60,30 80,30" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
+                <path d="M40,60 C50,50 60,50 70,60" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
+                <circle cx="70" cy="40" r="4"/>
+                <circle cx="80" cy="30" r="4"/>
+                <circle cx="70" cy="60" r="4"/>
             </svg>
         </div>
         <h1 class="hero-title">Aditya Kumar Prasad</h1>
