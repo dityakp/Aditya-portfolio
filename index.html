@@ -837,11 +837,19 @@
                 setTimeout(() => loader.remove(), 500);
             }, 3000);
 
-            initThreeBackground();
-            initAnimations();
-            initEventListeners();
-            animateSkillBars();
-            initTerminalEffect();
+            try {
+                initThreeBackground();
+            } catch (error) {
+                console.error('Failed to initialize Three.js background:', error);
+            }
+            try {
+                initAnimations();
+                initEventListeners();
+                animateSkillBars();
+                initTerminalEffect();
+            } catch (error) {
+                console.error('Error in initializing other features:', error);
+            }
         });
 
         function initThreeBackground() {
