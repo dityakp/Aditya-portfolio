@@ -7,12 +7,10 @@
     <meta name="keywords" content="Aditya Kumar Prasad, Blockchain Developer, AWS, Portfolio">
     <meta name="author" content="Aditya Kumar Prasad">
     <title>Aditya Kumar Prasad - Advanced Portfolio</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <style>
         :root {
             --primary: #00d4ff;
@@ -20,32 +18,28 @@
             --accent: #ff0266;
             --success: #00ff88;
             --warning: #ffb800;
-            --bg-dark: #0a0a0f;
-            --bg-card: rgba(15, 15, 25, 0.8);
-            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-dark: #0a0a0a; /* Darker blackish background */
+            --bg-card: rgba(10, 10, 15, 0.9); /* Darker card background */
+            --bg-glass: rgba(20, 20, 25, 0.1); /* Darker glass effect */
             --text-primary: #ffffff;
             --text-secondary: #a1a1aa;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            --border: rgba(255, 255, 255, 0.08); /* Subtle border */
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
+            background: linear-gradient(180deg, #0a0a0a 0%, #1c2526 100%); /* Blackish gradient */
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
         }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border-radius: 10px;
         }
-
         .loader {
             position: fixed; inset: 0; width: 100%; height: 100%;
             background: var(--bg-dark); z-index: 10000;
@@ -58,51 +52,44 @@
         }
         .loader-text::after { content: '|'; animation: blink 1s infinite; }
         @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-
-        /* Three.js container */
         #three-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; /* above blobs, below orbs and content */
+            z-index: -1;
         }
-
-        /* NEW: Decorative animated blobs behind Three.js */
         .fx-blob {
             position: fixed;
             width: 45vmax; height: 45vmax;
             border-radius: 50%;
             filter: blur(60px);
-            opacity: .16;
+            opacity: 0.12; /* Slightly reduced opacity for darker look */
             pointer-events: none;
-            mix-blend-mode: screen;
-            z-index: -3; /* very back */
+            mix-blend-mode: overlay; /* Changed to overlay for deeper integration */
+            z-index: -3;
             animation: fxBlobMove 22s ease-in-out infinite alternate;
         }
-        .fx-blob.a { background: radial-gradient(circle at 30% 30%, var(--primary), transparent 60%); top:-10vmax; left:-10vmax; }
-        .fx-blob.b { background: radial-gradient(circle at 70% 70%, var(--secondary), transparent 60%); bottom:-15vmax; right:-5vmax; animation-duration: 28s; }
-        .fx-blob.c { background: radial-gradient(circle at 50% 50%, var(--accent), transparent 60%); top:40vh; left:50vw; animation-duration: 26s; }
+        .fx-blob.a { background: radial-gradient(circle at 30% 30%, #1a3c4f, transparent 60%); top: -10vmax; left: -10vmax; }
+        .fx-blob.b { background: radial-gradient(circle at 70% 70%, #2a1a4f, transparent 60%); bottom: -15vmax; right: -5vmax; animation-duration: 28s; }
+        .fx-blob.c { background: radial-gradient(circle at 50% 50%, #4f1a3c, transparent 60%); top: 40vh; left: 50vw; animation-duration: 26s; }
         @keyframes fxBlobMove {
             0% { transform: translate(-2vw, -1vh) scale(1); }
             50% { transform: translate(3vw, 2vh) scale(1.05); }
             100% { transform: translate(-1vw, 1vh) scale(1.02); }
         }
-
-        /* NEW: Parallax orbs above Three.js but behind content */
         .fx-orb {
             position: fixed;
             width: 18vmin; height: 18vmin;
-            border-radius:50%;
-            background: radial-gradient(circle at 35% 35%, #ffffff, #ffffff10);
-            border:1px solid #ffffff20;
-            box-shadow: 0 10px 40px #00000066, inset 0 0 40px #ffffff0d;
-            opacity:.18;
-            z-index: -1; /* above three-bg (-1), below content (default) */
-            transition: transform .08s linear;
-            pointer-events:none;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff33, #ffffff05); /* Subtler orb glow */
+            border: 1px solid #ffffff15;
+            box-shadow: 0 10px 40px #00000080, inset 0 0 40px #ffffff08;
+            opacity: 0.15;
+            z-index: -1;
+            transition: transform 0.08s linear;
+            pointer-events: none;
         }
-        .fx-orb.o1{ top:10vh; left:8vw; }
-        .fx-orb.o2{ top:62vh; left:15vw; width:22vmin; height:22vmin; }
-        .fx-orb.o3{ top:22vh; right:8vw; }
-
+        .fx-orb.o1 { top: 10vh; left: 8vw; }
+        .fx-orb.o2 { top: 62vh; left: 15vw; width: 22vmin; height: 22vmin; }
+        .fx-orb.o3 { top: 22vh; right: 8vw; }
         .nav-container {
             position: fixed; top: 2rem; right: 2rem; z-index: 1000;
         }
@@ -114,7 +101,6 @@
             cursor: pointer; transition: all 0.3s ease;
         }
         .nav-toggle:hover { background: var(--bg-card); transform: scale(1.1); }
-
         .nav-menu {
             position: absolute; top: 80px; right: 0;
             background: var(--bg-glass); backdrop-filter: blur(20px);
@@ -129,19 +115,16 @@
             padding: 0.8rem 1rem; border-radius: 10px; transition: all 0.3s ease; margin-bottom: 0.5rem;
         }
         .nav-menu a:hover { background: linear-gradient(135deg, var(--primary), var(--secondary)); transform: translateX(5px); }
-
         .progress-bar {
             position: fixed; top: 0; left: 0; height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             z-index: 9999; transition: width 0.3s ease;
         }
-
         .hero {
             min-height: 100vh; display: flex; flex-direction: column;
             align-items: center; justify-content: center; text-align: center;
             position: relative; padding: 2rem;
         }
-
         .hero-avatar {
             width: 150px; height: 150px; border-radius: 50%;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -169,14 +152,11 @@
         .hero-avatar svg circle {
             fill: var(--primary);
             filter: drop-shadow(0 0 5px var(--primary));
-            transform-origin: center; animation: glow 2s ease-in-out infinite;
+            /* Removed glow animation */
         }
         .hero-avatar:hover svg { transform: scale(1.1); transition: transform 0.3s ease; }
-
         @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes trace { 0% { stroke-dashoffset: 200; } 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -200; } }
-        @keyframes glow { 0% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.7; transform: scale(1); } }
-
         .hero-title {
             font-size: clamp(2rem, 6vw, 5rem);
             font-weight: 800;
@@ -187,18 +167,15 @@
             margin-bottom: 1rem;
         }
         @keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-
         .hero-subtitle {
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: var(--text-secondary);
             margin-bottom: 2rem;
             font-family: 'JetBrains Mono', monospace;
         }
-
         .hero-cta {
             display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
         }
-
         .btn {
             padding: 1rem 2rem;
             border: none; border-radius: 50px; font-weight: 600;
@@ -215,7 +192,6 @@
             transition: left 0.5s;
         }
         .btn:hover::before { left: 100%; }
-
         .section {
             min-height: 100vh; padding: 5rem 2rem; display: flex; flex-direction: column; justify-content: center;
             max-width: 1200px; margin: 0 auto;
@@ -227,12 +203,10 @@
             content: ''; position: absolute; bottom: -10px; left: 0; width: 80px; height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 2px;
         }
-
         .card-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem; margin-top: 2rem;
         }
-
         .card {
             background: var(--bg-glass); backdrop-filter: blur(20px);
             border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
@@ -245,20 +219,17 @@
         }
         .card:hover { transform: translateY(-10px); box-shadow: var(--shadow); border-color: var(--primary); }
         .card:hover::before { opacity: 1; }
-
         .skill-item {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.02);
             border-radius: 10px; transition: all 0.3s ease;
         }
         .skill-item:hover { background: rgba(0, 212, 255, 0.1); transform: translateX(10px); }
-
         .skill-bar { width: 100px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
         .skill-progress {
             height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 3px; width: 0; transition: width 2s ease;
         }
-
         .project-card {
             background: var(--bg-glass); backdrop-filter: blur(20px);
             border: 1px solid var(--border); border-radius: 20px; padding: 2rem; margin-bottom: 2rem;
@@ -271,14 +242,13 @@
             opacity: 0; transition: opacity 0.3s ease;
         }
         .project-card:hover::before { opacity: 1; }
-
         .project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
         .tech-tag {
-            padding: 0.35rem 0.9rem; /* slightly larger for better touch targets */
-            background: linear-gradient(135deg, #7c3aed 0%, #00d4ff 100%); /* purple -> teal */
+            padding: 0.35rem 0.9rem;
+            background: linear-gradient(135deg, #7c3aed 0%, #00d4ff 100%);
             color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
             transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-            box-shadow: 0 6px 18px rgba(124,58,237,0.12); /* subtle shadow */
+            box-shadow: 0 6px 18px rgba(124,58,237,0.12);
             display: inline-flex; align-items: center; gap: 0.4rem;
         }
         .tech-tag:focus,
@@ -287,7 +257,6 @@
             box-shadow: 0 14px 30px rgba(0,212,255,0.12);
             opacity: 0.98;
         }
-
         .social-grid { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
         .social-link {
             width: 60px; height: 60px; background: var(--bg-glass); backdrop-filter: blur(20px);
@@ -306,9 +275,9 @@
         .social-link:nth-child(2):hover { box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
         .social-link:nth-child(3):hover { box-shadow: 0 10px 30px rgba(255, 2, 102, 0.4); }
         .social-link:nth-child(4):hover { box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4); }
-
         .terminal {
-            background: #1a1a1a; border-radius: 10px; padding: 1rem;
+            background: #151515; /* Darker terminal background */
+            border-radius: 10px; padding: 1rem;
             font-family: 'JetBrains Mono', monospace; margin-top: 2rem; border: 1px solid var(--border);
         }
         .terminal-header { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
@@ -317,16 +286,13 @@
         .dot-yellow { background: #ffbd2e; }
         .dot-green { background: #27ca3f; }
         .terminal-text { color: var(--success); line-height: 1.8; min-height: 120px; white-space: pre-wrap; }
-
         .fade-in { opacity: 0; transform: translateY(30px); }
-
         .btn { position: relative; overflow: hidden; }
         .ripple {
             position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3);
             transform: scale(0); animation: ripple-animation 0.6s linear; pointer-events: none;
         }
         @keyframes ripple-animation { to { transform: scale(4); opacity: 0; } }
-
         @media (max-width: 768px) {
             .nav-container { top: 1rem; right: 1rem; }
             .hero { padding: 1rem; }
@@ -336,8 +302,6 @@
             .card-grid { grid-template-columns: 1fr; }
             .social-grid { gap: 1rem; }
         }
-
-        /* Respect reduced motion */
         @media (prefers-reduced-motion: reduce) {
             .fx-blob, .fx-orb { animation: none !important; transition: none !important; }
             .hero-avatar::before { animation: none !important; }
@@ -348,22 +312,14 @@
     <div class="loader">
         <div class="loader-text">Initializing Portfolio</div>
     </div>
-
     <div class="progress-bar"></div>
-
-    <!-- NEW: Background gradient blobs (very back) -->
     <div class="fx-blob a" aria-hidden="true"></div>
     <div class="fx-blob b" aria-hidden="true"></div>
     <div class="fx-blob c" aria-hidden="true"></div>
-
-    <!-- Three.js particles -->
     <div id="three-bg"></div>
-
-    <!-- NEW: Parallax orbs (above three, behind content) -->
     <div class="fx-orb o1" data-depth="12" aria-hidden="true"></div>
     <div class="fx-orb o2" data-depth="18" aria-hidden="true"></div>
     <div class="fx-orb o3" data-depth="8" aria-hidden="true"></div>
-
     <nav class="nav-container">
         <div class="nav-toggle">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -381,7 +337,6 @@
             <a href="#projects">Projects</a>
         </div>
     </nav>
-
     <section class="hero">
         <div class="hero-avatar">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -427,35 +382,31 @@
             </a>
         </div>
     </section>
-
     <section id="about" class="section fade-in">
-  <h2 class="section-title">About Me</h2>
-  <div class="card">
-    <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-secondary);">
-      Hi, I'm <strong>Aditya</strong>!<br><br>
-      I'm in the final year of my Bachelor of Computer Applications (BCA) and building expertise in 
-      <strong>DevOps, Cloud, and Automation</strong>. I've worked on projects involving 
-      <strong>AWS, Docker, Jenkins, and CI/CD pipelines</strong>—deploying scalable applications and 
-      automating workflows to improve efficiency.<br><br>
-      I enjoy solving problems with Linux, scripting, and containerization, and I'm passionate about 
-      creating reliable, secure, and production-ready systems. Always curious and eager to learn, 
-      I'm on a journey to grow as a DevOps engineer while contributing to impactful projects.
-    </p>
-
-    <div class="terminal">
-      <div class="terminal-header">
-        <div class="terminal-dot dot-red"></div>
-        <div class="terminal-dot dot-yellow"></div>
-        <div class="terminal-dot dot-green"></div>
-      </div>
-      <div class="terminal-text">
-        <!-- You can add a fun typing effect here with JS -->
-        <p>$ whoami<br>Aditya — DevOps Enthusiast 🚀</p>
-      </div>
-    </div>
-  </div>
-</section>
-
+        <h2 class="section-title">About Me</h2>
+        <div class="card">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-secondary);">
+                Hi, I'm <strong>Aditya</strong>!<br><br>
+                I'm in the final year of my Bachelor of Computer Applications (BCA) and building expertise in
+                <strong>DevOps, Cloud, and Automation</strong>. I've worked on projects involving
+                <strong>AWS, Docker, Jenkins, and CI/CD pipelines</strong>—deploying scalable applications and
+                automating workflows to improve efficiency.<br><br>
+                I enjoy solving problems with Linux, scripting, and containerization, and I'm passionate about
+                creating reliable, secure, and production-ready systems. Always curious and eager to learn,
+                I'm on a journey to grow as a DevOps engineer while contributing to impactful projects.
+            </p>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-text">
+                    <p>$ whoami<br>Aditya — DevOps Enthusiast 🚀</p>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="education" class="section fade-in">
         <h2 class="section-title">Education</h2>
         <div class="card-grid">
@@ -472,7 +423,6 @@
             </div>
         </div>
     </section>
-
     <section id="experience" class="section fade-in">
         <h2 class="section-title">Experience</h2>
         <div class="card-grid">
@@ -488,7 +438,6 @@
             </div>
         </div>
     </section>
-
     <section id="certifications" class="section fade-in">
         <h2 class="section-title">Certifications</h2>
         <div class="card" style="text-align: center;">
@@ -498,7 +447,6 @@
             <a href="https://www.credly.com/users/aditya-kumar-prasad.5a0168ce" target="_blank" class="btn btn-primary">Credly Profile</a>
         </div>
     </section>
-
     <section id="skills" class="section fade-in">
         <h2 class="section-title">Technical Skills</h2>
         <div class="card-grid">
@@ -565,7 +513,6 @@
             </div>
         </div>
     </section>
-
     <section id="professional-skills" class="section fade-in">
         <h2 class="section-title">Professional Skills</h2>
         <div class="card">
@@ -583,7 +530,6 @@
             </div>
         </div>
     </section>
-
     <section id="projects" class="section fade-in">
         <h2 class="section-title">Featured Projects</h2>
         <div class="project-card">
@@ -593,8 +539,8 @@
                 </a>
             </h3>
             <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Developed a scalable cloud-based system to automate attendance tracking with support of AWS tools. 
-                Delivered secure data storage, real-time analytics, and automated notifications for attendance exceptions. 
+                Developed a scalable cloud-based system to automate attendance tracking with support of AWS tools.
+                Delivered secure data storage, real-time analytics, and automated notifications for attendance exceptions.
                 Provided intuitive web and mobile interfaces for multi-device access and administrative control.
             </p>
             <div class="project-tech">
@@ -611,14 +557,14 @@
         <div class="project-card">
             <h3>
                 <a href="https://github.com/dityakp/django-todo" target="_blank" style="color: var(--primary); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--primary)'">
-                     Django To-do list Application
+                    Django To-do list Application
                 </a>
             </h3>
             <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Built and deployed a Django-based task management system on Ubuntu AWS EC2 instance. 
-                Migrated application from local server to Docker containerized environment for reproducibility which reduced the deployment time by 40%. 
-                Automated deployment workflows using Jenkins pipelines(CI/CD), integrating build, test, and deployment stages. 
-                Applied Linux system administration skills for server setup, firewall configuration, and service monitoring. 
+                Built and deployed a Django-based task management system on Ubuntu AWS EC2 instance.
+                Migrated application from local server to Docker containerized environment for reproducibility which reduced the deployment time by 40%.
+                Automated deployment workflows using Jenkins pipelines(CI/CD), integrating build, test, and deployment stages.
+                Applied Linux system administration skills for server setup, firewall configuration, and service monitoring.
                 Enhanced deployment reliability by leveraging Docker Compose for multi-service orchestration
             </p>
             <div class="project-tech">
@@ -633,19 +579,16 @@
             </div>
         </div>
     </section>
-
     <footer style="text-align: center; padding: 2rem; color: var(--text-secondary);">
         <p>© 2025 Aditya Kumar Prasad. All rights reserved.</p>
     </footer>
-
     <script>
         window.addEventListener('load', () => {
-            const loader = document.querySelector('.loader'); 
+            const loader = document.querySelector('.loader');
             setTimeout(() => {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.remove(), 500);
-            }, 1500); // slightly faster for better UX
-
+            }, 1500);
             try { initThreeBackground(); } catch (error) {
                 console.error('Failed to initialize Three.js background:', error);
             }
@@ -654,15 +597,12 @@
                 initEventListeners();
                 animateSkillBars();
                 initTerminalEffect();
-
-                // NEW initializers
                 initParallaxOrbs();
                 extendHeroAnimation();
             } catch (error) {
                 console.error('Error in initializing other features:', error);
             }
         });
-
         function initThreeBackground() {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -670,12 +610,10 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(0x000000, 0);
             document.getElementById('three-bg').appendChild(renderer.domElement);
-
             const particlesCount = 200;
             const particlesGeometry = new THREE.BufferGeometry();
             const posArray = new Float32Array(particlesCount * 3);
             const basePositions = new Float32Array(particlesCount * 3);
-
             for (let i = 0; i < particlesCount; i++) {
                 const i3 = i * 3;
                 posArray[i3] = (Math.random() - 0.5) * 20;
@@ -685,49 +623,38 @@
                 basePositions[i3 + 1] = posArray[i3 + 1];
                 basePositions[i3 + 2] = posArray[i3 + 2];
             }
-
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
             const particlesMaterial = new THREE.PointsMaterial({
                 size: 0.03,
-                color: 0x00d4ff,
+                color: 0x4a6a7a, /* Darker cyan for blackish theme */
                 transparent: true,
-                opacity: 0.7,
+                opacity: 0.6,
                 blending: THREE.AdditiveBlending
             });
-
             const particles = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particles);
-
             const lineMaterial = new THREE.LineBasicMaterial({
-                color: 0x00d4ff,
+                color: 0x4a6a7a, /* Matching darker cyan */
                 transparent: true,
-                opacity: 0.3
+                opacity: 0.25
             });
-
             const maxConnections = 1000;
             const lineGeometry = new THREE.BufferGeometry();
             const linePositions = new Float32Array(maxConnections * 6);
             lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
             const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
             scene.add(lines);
-
             camera.position.z = 15;
-
             let mouseX = 0;
             let mouseY = 0;
-
             document.addEventListener('mousemove', (event) => {
                 mouseX = (event.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
             }, { passive: true });
-
             let time = 0;
-
             function animate() {
                 requestAnimationFrame(animate);
                 time += 0.02;
-
-                // particle drifting
                 for (let i = 0; i < particlesCount; i++) {
                     const i3 = i * 3;
                     posArray[i3] = basePositions[i3] + Math.sin(time + i) * 0.5;
@@ -735,8 +662,6 @@
                     posArray[i3 + 2] = basePositions[i3 + 2] + Math.sin(time + i * 0.3) * 0.5;
                 }
                 particlesGeometry.attributes.position.needsUpdate = true;
-
-                // dynamic connections
                 let lineIndex = 0;
                 const maxDistance = 2;
                 for (let i = 0; i < particlesCount; i++) {
@@ -761,29 +686,22 @@
                 }
                 lineGeometry.setDrawRange(0, lineIndex * 2);
                 lineGeometry.attributes.position.needsUpdate = true;
-
-                // camera gentle follow
                 camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
                 camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
-
                 particles.rotation.y += 0.001;
                 renderer.render(scene, camera);
             }
-
             animate();
-
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
-
         function initAnimations() {
             gsap.registerPlugin(ScrollTrigger);
-
             gsap.utils.toArray('.fade-in').forEach((section) => {
-                gsap.fromTo(section, 
+                gsap.fromTo(section,
                     { opacity: 0, y: 100 },
                     {
                         opacity: 1,
@@ -800,7 +718,6 @@
                     }
                 );
             });
-
             gsap.utils.toArray('.card').forEach((card, index) => {
                 gsap.fromTo(card,
                     { opacity: 0, y: 50, scale: 0.95 },
@@ -820,14 +737,12 @@
                     }
                 );
             });
-
             const tl = gsap.timeline();
             tl.from('.hero-avatar', { scale: 0, rotation: 180, duration: 1.2, ease: "elastic.out(1, 0.5)" })
               .from('.hero-title', { opacity: 0, y: 50, duration: 0.9, ease: "power3.out" }, "-=0.5")
               .from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.5")
               .from('.hero-cta', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.3")
               .from('.social-grid', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.3");
-
             gsap.to('.hero', {
                 yPercent: -30,
                 ease: "none",
@@ -839,21 +754,17 @@
                 }
             });
         }
-
         function initEventListeners() {
             const navToggle = document.querySelector('.nav-toggle');
             const navMenu = document.querySelector('.nav-menu');
-
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
             });
-
             document.addEventListener('click', (e) => {
                 if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
                     navMenu.classList.remove('active');
                 }
             });
-
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -864,7 +775,6 @@
                     }
                 });
             });
-
             const progressBar = document.querySelector('.progress-bar');
             window.addEventListener('scroll', () => {
                 const scrollTop = window.pageYOffset;
@@ -872,7 +782,6 @@
                 const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
                 progressBar.style.width = scrollPercent + '%';
             });
-
             document.querySelectorAll('.card').forEach(card => {
                 card.addEventListener('mouseenter', () => {
                     gsap.to(card, { scale: 1.02, duration: 0.25, ease: "power2.out" });
@@ -881,7 +790,6 @@
                     gsap.to(card, { scale: 1, duration: 0.25, ease: "power2.out" });
                 });
             });
-
             document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     const ripple = document.createElement('span');
@@ -898,7 +806,6 @@
                 });
             });
         }
-
         function animateSkillBars() {
             const skillBars = document.querySelectorAll('.skill-progress');
             const observer = new IntersectionObserver((entries) => {
@@ -913,11 +820,9 @@
             });
             skillBars.forEach(bar => observer.observe(bar));
         }
-
         function initTerminalEffect() {
             const terminalText = document.querySelector('.terminal-text');
             if (!terminalText) return;
-
             const lines = [
                 '$ whoami',
                 '> dityakp',
@@ -926,11 +831,9 @@
                 '$ status',
                 '> Currently building the future, one block at a time...'
             ];
-
             let currentLine = 0;
             let currentChar = 0;
             let output = '';
-
             function typeLine() {
                 if (currentLine >= lines.length) return;
                 output += lines[currentLine][currentChar];
@@ -945,7 +848,6 @@
                     setTimeout(typeLine, 50);
                 }
             }
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -954,7 +856,6 @@
                     }
                 });
             }, { threshold: 0.1 });
-
             const terminal = document.querySelector('.terminal');
             if (terminal) {
                 observer.observe(terminal);
@@ -965,21 +866,17 @@
                 }
             }
         }
-
-        // NEW: Lightweight mouse parallax for orbs
         function initParallaxOrbs() {
             const orbs = Array.from(document.querySelectorAll('.fx-orb'));
             if (!orbs.length) return;
             let rx = 0, ry = 0;
             let targetX = 0, targetY = 0;
             const lerp = (a, b, n) => (1 - n) * a + n * b;
-
             function onMove(e) {
                 const w = window.innerWidth, h = window.innerHeight;
                 targetX = (e.clientX / w - 0.5) * 2;
                 targetY = (e.clientY / h - 0.5) * 2;
             }
-
             function tick() {
                 rx = lerp(rx, targetX, 0.08);
                 ry = lerp(ry, targetY, 0.08);
@@ -989,12 +886,9 @@
                 }
                 requestAnimationFrame(tick);
             }
-
             window.addEventListener('mousemove', onMove, { passive: true });
             tick();
         }
-
-        // NEW: Subtle continuous hero polish without duplicating your intro TL
         function extendHeroAnimation() {
             if (!window.gsap) return;
             const tl2 = gsap.timeline({ defaults: { ease: 'sine.inOut' } });
