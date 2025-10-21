@@ -6,35 +6,35 @@
     <meta name="description" content="Portfolio of Aditya Kumar Prasad, an aspiring Blockchain Developer skilled in AWS, C++, and DSA.">
     <meta name="keywords" content="Aditya Kumar Prasad, Blockchain Developer, AWS, Portfolio">
     <meta name="author" content="Aditya Kumar Prasad">
-    <title>Aditya Kumar Prasad - Advanced Portfolio</title>
+    <title>Aditya Kumar Prasad - Cosmic Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --primary: #00d4ff;
-            --secondary: #7c3aed;
-            --accent: #ff0266;
-            --success: #00ff88;
-            --warning: #ffb800;
-            --bg-dark: #0a0a0a; /* Darker blackish background */
-            --bg-card: rgba(10, 10, 15, 0.9); /* Darker card background */
-            --bg-glass: rgba(20, 20, 25, 0.1); /* Darker glass effect */
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --border: rgba(255, 255, 255, 0.08); /* Subtle border */
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            --primary: #00b4d8;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #06d6a0;
+            --warning: #f48c06;
+            --bg-dark: #03030a; /* Deep space black */
+            --bg-card: rgba(10, 10, 20, 0.9);
+            --bg-glass: rgba(20, 20, 40, 0.15);
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0c0;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 15px 40px rgba(0, 0, 0, 0.95);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1c2526 100%); /* Blackish gradient */
+            background: #03030a; /* Cosmic black background */
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
         }
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -42,81 +42,62 @@
         }
         .loader {
             position: fixed; inset: 0; width: 100%; height: 100%;
-            background: var(--bg-dark); z-index: 10000;
+            background: radial-gradient(circle at center, #0a0a1a, #03030a); /* Cosmic gradient */
+            z-index: 10000;
             display: flex; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.8s ease-out;
         }
         .loader-text {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem; color: var(--primary); position: relative;
+            font-size: 1.3rem; color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            animation: pulse 2s ease-in-out infinite;
         }
-        .loader-text::after { content: '|'; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-        #three-bg {
+        @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+        /* Starry background container */
+        #starry-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
         }
-        .fx-blob {
-            position: fixed;
-            width: 45vmax; height: 45vmax;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.12; /* Slightly reduced opacity for darker look */
-            pointer-events: none;
-            mix-blend-mode: overlay; /* Changed to overlay for deeper integration */
-            z-index: -3;
-            animation: fxBlobMove 22s ease-in-out infinite alternate;
+        /* Wave texture overlay */
+        .wave-overlay {
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, rgba(11, 11, 33, 0.2), rgba(50, 20, 80, 0.1));
+            z-index: -2;
+            animation: waveShift 15s linear infinite;
         }
-        .fx-blob.a { background: radial-gradient(circle at 30% 30%, #1a3c4f, transparent 60%); top: -10vmax; left: -10vmax; }
-        .fx-blob.b { background: radial-gradient(circle at 70% 70%, #2a1a4f, transparent 60%); bottom: -15vmax; right: -5vmax; animation-duration: 28s; }
-        .fx-blob.c { background: radial-gradient(circle at 50% 50%, #4f1a3c, transparent 60%); top: 40vh; left: 50vw; animation-duration: 26s; }
-        @keyframes fxBlobMove {
-            0% { transform: translate(-2vw, -1vh) scale(1); }
-            50% { transform: translate(3vw, 2vh) scale(1.05); }
-            100% { transform: translate(-1vw, 1vh) scale(1.02); }
+        @keyframes waveShift {
+            0% { background-position: 0 0; }
+            100% { background-position: 200% 200%; }
         }
-        .fx-orb {
-            position: fixed;
-            width: 18vmin; height: 18vmin;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #ffffff33, #ffffff05); /* Subtler orb glow */
-            border: 1px solid #ffffff15;
-            box-shadow: 0 10px 40px #00000080, inset 0 0 40px #ffffff08;
-            opacity: 0.15;
-            z-index: -1;
-            transition: transform 0.08s linear;
-            pointer-events: none;
-        }
-        .fx-orb.o1 { top: 10vh; left: 8vw; }
-        .fx-orb.o2 { top: 62vh; left: 15vw; width: 22vmin; height: 22vmin; }
-        .fx-orb.o3 { top: 22vh; right: 8vw; }
+        /* Navigation */
         .nav-container {
-            position: fixed; top: 2rem; right: 2rem; z-index: 1000;
+            position: fixed; top: 1.5rem; right: 1.5rem; z-index: 1000;
         }
         .nav-toggle {
-            width: 60px; height: 60px;
-            background: var(--bg-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 50%;
+            width: 50px; height: 50px;
+            background: var(--bg-glass); backdrop-filter: blur(15px);
+            border: 1px solid var(--border); border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: all 0.3s ease;
         }
-        .nav-toggle:hover { background: var(--bg-card); transform: scale(1.1); }
+        .nav-toggle:hover { transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 180, 216, 0.3); }
         .nav-menu {
-            position: absolute; top: 80px; right: 0;
-            background: var(--bg-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 20px;
-            padding: 1.5rem; min-width: 200px;
-            opacity: 0; transform: translateY(-20px); pointer-events: none;
+            position: absolute; top: 70px; right: 0;
+            background: var(--bg-glass); backdrop-filter: blur(15px);
+            border: 1px solid var(--border); border-radius: 15px;
+            padding: 1rem; min-width: 180px;
+            opacity: 0; transform: translateY(-10px); pointer-events: none;
             transition: all 0.3s ease;
         }
         .nav-menu.active { opacity: 1; transform: translateY(0); pointer-events: all; }
         .nav-menu a {
             display: block; color: var(--text-primary); text-decoration: none;
-            padding: 0.8rem 1rem; border-radius: 10px; transition: all 0.3s ease; margin-bottom: 0.5rem;
+            padding: 0.7rem 1rem; border-radius: 8px; transition: all 0.3s ease;
         }
-        .nav-menu a:hover { background: linear-gradient(135deg, var(--primary), var(--secondary)); transform: translateX(5px); }
+        .nav-menu a:hover { background: var(--primary); color: #03030a; transform: translateX(3px); }
         .progress-bar {
-            position: fixed; top: 0; left: 0; height: 3px;
+            position: fixed; top: 0; left: 0; height: 2px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             z-index: 9999; transition: width 0.3s ease;
         }
@@ -126,176 +107,167 @@
             position: relative; padding: 2rem;
         }
         .hero-avatar {
-            width: 150px; height: 150px; border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            width: 140px; height: 140px; border-radius: 50%;
+            background: radial-gradient(circle, var(--primary), var(--secondary));
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 2rem; position: relative; overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
+            animation: glowPulse 4s ease-in-out infinite;
         }
-        .hero-avatar::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent, var(--accent), transparent);
-            animation: rotate 3s linear infinite;
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 180, 216, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 180, 216, 0.8); }
         }
         .hero-avatar::after {
             content: ''; position: absolute; background: var(--bg-dark);
-            width: 130px; height: 130px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            width: 120px; height: 120px; border-radius: 50%;
         }
-        .hero-avatar svg { width: 90px; height: 90px; z-index: 1; }
+        .hero-avatar svg { width: 80px; height: 80px; z-index: 1; }
         .hero-avatar svg path {
-            fill: none; stroke: url(#circuitGradient); stroke-width: 3;
+            fill: none; stroke: url(#circuitGradient); stroke-width: 2.5;
             stroke-linecap: round; stroke-linejoin: round;
-            stroke-dasharray: 200; stroke-dashoffset: 200;
-            animation: trace 3s ease-in-out infinite;
+            stroke-dasharray: 150; stroke-dashoffset: 150;
+            animation: drawPath 2.5s ease-in-out infinite;
         }
         .hero-avatar svg circle {
             fill: var(--primary);
-            filter: drop-shadow(0 0 5px var(--primary));
-            /* Removed glow animation */
+            filter: drop-shadow(0 0 4px var(--primary));
+            transform-origin: center; animation: scalePulse 3s ease-in-out infinite;
         }
-        .hero-avatar:hover svg { transform: scale(1.1); transition: transform 0.3s ease; }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes trace { 0% { stroke-dashoffset: 200; } 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -200; } }
+        @keyframes drawPath { 0% { stroke-dashoffset: 150; } 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -150; } }
+        @keyframes scalePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .hero-title {
-            font-size: clamp(2rem, 6vw, 5rem);
+            font-size: clamp(2rem, 5.5vw, 4.5rem);
             font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
             background-size: 300% 300%;
             -webkit-background-clip: text; background-clip: text; color: transparent;
-            animation: gradient-shift 3s ease-in-out infinite;
-            margin-bottom: 1rem;
+            animation: gradientFlow 5s ease-in-out infinite;
         }
-        @keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .hero-subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
             color: var(--text-secondary);
             margin-bottom: 2rem;
             font-family: 'JetBrains Mono', monospace;
+            text-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
         }
         .hero-cta {
             display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
         }
         .btn {
-            padding: 1rem 2rem;
-            border: none; border-radius: 50px; font-weight: 600;
+            padding: 0.9rem 1.8rem;
+            border: none; border-radius: 30px; font-weight: 600;
             cursor: pointer; transition: all 0.3s ease;
             text-decoration: none; display: inline-block; position: relative; overflow: hidden;
         }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
-        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-        .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-        .btn::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-primary);
         }
-        .btn:hover::before { left: 100%; }
+        .btn-outline {
+            background: transparent; color: var(--primary); border: 2px solid var(--primary);
+        }
+        .btn:hover {
+            transform: translateY(-2px); box veinte: var(--shadow); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+        }
         .section {
-            min-height: 100vh; padding: 5rem 2rem; display: flex; flex-direction: column; justify-content: center;
-            max-width: 1200px; margin: 0 auto;
+            min-height: 100vh; padding: 4rem 1.5rem; display: flex; flex-direction: column; justify-content: center;
+            max-width: 1100px; margin: 0 auto;
         }
         .section-title {
-            font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; margin-bottom: 3rem; position: relative; color: var(--text-primary);
+            font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 2.5rem;
+            position: relative; color: var(--text-primary); text-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
         }
         .section-title::after {
-            content: ''; position: absolute; bottom: -10px; left: 0; width: 80px; height: 4px;
+            content: ''; position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 2px;
         }
         .card-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem; margin-top: 2rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; margin-top: 1.5rem;
         }
         .card {
-            background: var(--bg-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
+            background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--border); border-radius: 15px; padding: 1.8rem;
             transition: all 0.3s ease; position: relative; overflow: hidden;
         }
+        .card:hover {
+            transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
+            border-color: var(--primary);
+        }
         .card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 180, 216, 0.1), transparent);
             opacity: 0; transition: opacity 0.3s ease;
         }
-        .card:hover { transform: translateY(-10px); box-shadow: var(--shadow); border-color: var(--primary); }
         .card:hover::before { opacity: 1; }
         .skill-item {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px; transition: all 0.3s ease;
+            margin-bottom: 0.8rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px; transition: all 0.3s ease;
         }
-        .skill-item:hover { background: rgba(0, 212, 255, 0.1); transform: translateX(10px); }
-        .skill-bar { width: 100px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+        .skill-item:hover {
+            background: rgba(0, 180, 216, 0.15); transform: translateX(5px);
+        }
+        .skill-bar {
+            width: 90px; height: 5px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden;
+        }
         .skill-progress {
             height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 3px; width: 0; transition: width 2s ease;
+            border-radius: 2px; width: 0; transition: width 1.5s ease-out;
         }
         .project-card {
-            background: var(--bg-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 20px; padding: 2rem; margin-bottom: 2rem;
+            background: var(--bg-card); backdrop-filter: blur(10px);
+            border: 1px solid var(--border); border-radius: 15px; padding: 1.8rem; margin-bottom: 1.5rem;
             transition: all 0.3s ease; position: relative;
         }
-        .project-card:hover { transform: scale(1.02); box-shadow: var(--shadow); }
-        .project-card::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.05), transparent);
-            opacity: 0; transition: opacity 0.3s ease;
+        .project-card:hover {
+            transform: scale(1.03); box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
         }
-        .project-card:hover::before { opacity: 1; }
-        .project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .project-tech {
+            display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem;
+        }
         .tech-tag {
-            padding: 0.35rem 0.9rem;
-            background: linear-gradient(135deg, #7c3aed 0%, #00d4ff 100%);
-            color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-            box-shadow: 0 6px 18px rgba(124,58,237,0.12);
-            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.4rem 1rem; background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: var(--text-primary); border-radius: 20px; font-size: 0.85rem; font-weight: 500;
+            transition: all 0.2s ease; box-shadow: 0 0 10px rgba(0, 180, 216, 0.2);
         }
-        .tech-tag:focus,
         .tech-tag:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 14px 30px rgba(0,212,255,0.12);
-            opacity: 0.98;
+            transform: translateY(-2px); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
         }
-        .social-grid { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+        .social-grid {
+            display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem;
+        }
         .social-link {
-            width: 60px; height: 60px; background: var(--bg-glass); backdrop-filter: blur(20px);
+            width: 50px; height: 50px; background: var(--bg-glass); backdrop-filter: blur(10px);
             border: 1px solid var(--border); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; color: var(--text-primary);
-            text-decoration: none; transition: all 0.3s ease; position: relative; overflow: hidden;
+            text-decoration: none; transition: all 0.3s ease; position: relative;
         }
-        .social-link::before {
-            content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            opacity: 0; transition: opacity 0.3s ease;
+        .social-link:hover {
+            transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
         }
-        .social-link:hover { transform: translateY(-5px) scale(1.1); box-shadow: var(--shadow); }
-        .social-link:hover::before { opacity: 1; }
-        .social-link svg { width: 24px; height: 24px; position: relative; z-index: 1; }
-        .social-link:nth-child(1):hover { box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4); }
-        .social-link:nth-child(2):hover { box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
-        .social-link:nth-child(3):hover { box-shadow: 0 10px 30px rgba(255, 2, 102, 0.4); }
-        .social-link:nth-child(4):hover { box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4); }
+        .social-link svg { width: 22px; height: 22px; }
         .terminal {
-            background: #151515; /* Darker terminal background */
-            border-radius: 10px; padding: 1rem;
-            font-family: 'JetBrains Mono', monospace; margin-top: 2rem; border: 1px solid var(--border);
+            background: #0a0a1a; border-radius: 10px; padding: 1rem;
+            font-family: 'JetBrains Mono', monospace; margin-top: 1.5rem; border: 1px solid var(--border);
         }
         .terminal-header { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
         .dot-red { background: #ff5f56; }
         .dot-yellow { background: #ffbd2e; }
         .dot-green { background: #27ca3f; }
-        .terminal-text { color: var(--success); line-height: 1.8; min-height: 120px; white-space: pre-wrap; }
-        .fade-in { opacity: 0; transform: translateY(30px); }
-        .btn { position: relative; overflow: hidden; }
+        .terminal-text { color: var(--success); line-height: 1.7; min-height: 100px; white-space: pre-wrap; }
+        .fade-in { opacity: 0; transform: translateY(20px); }
         .ripple {
-            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3);
-            transform: scale(0); animation: ripple-animation 0.6s linear; pointer-events: none;
+            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.2);
+            transform: scale(0); animation: ripple-effect 0.5s linear; pointer-events: none;
         }
-        @keyframes ripple-animation { to { transform: scale(4); opacity: 0; } }
+        @keyframes ripple-effect { to { transform: scale(3); opacity: 0; } }
         @media (max-width: 768px) {
             .nav-container { top: 1rem; right: 1rem; }
-            .hero { padding: 1rem; }
+            .hero { padding: 1.5rem; }
             .hero-cta { flex-direction: column; align-items: center; }
             .section { padding: 3rem 1rem; }
             .section-title { font-size: 2rem; }
@@ -303,23 +275,17 @@
             .social-grid { gap: 1rem; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .fx-blob, .fx-orb { animation: none !important; transition: none !important; }
-            .hero-avatar::before { animation: none !important; }
+            .wave-overlay, .hero-avatar, .card, .skill-item, .tech-tag { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
 <body>
     <div class="loader">
-        <div class="loader-text">Initializing Portfolio</div>
+        <div class="loader-text">Initializing Cosmic Portfolio</div>
     </div>
     <div class="progress-bar"></div>
-    <div class="fx-blob a" aria-hidden="true"></div>
-    <div class="fx-blob b" aria-hidden="true"></div>
-    <div class="fx-blob c" aria-hidden="true"></div>
-    <div id="three-bg"></div>
-    <div class="fx-orb o1" data-depth="12" aria-hidden="true"></div>
-    <div class="fx-orb o2" data-depth="18" aria-hidden="true"></div>
-    <div class="fx-orb o3" data-depth="8" aria-hidden="true"></div>
+    <div class="wave-overlay" aria-hidden="true"></div>
+    <div id="starry-bg"></div>
     <nav class="nav-container">
         <div class="nav-toggle">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -346,12 +312,12 @@
                         <stop offset="100%" style="stop-color: var(--secondary); stop-opacity: 1" />
                     </linearGradient>
                 </defs>
-                <path d="M20,80 C30,60 50,40 70,40 S80,60 80,80" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
-                <path d="M30,70 C40,50 60,30 80,30" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
-                <path d="M40,60 C50,50 60,50 70,60" fill="none" stroke="url(#circuitGradient)" stroke-width="3"/>
-                <circle cx="70" cy="40" r="4"/>
-                <circle cx="80" cy="30" r="4"/>
-                <circle cx="70" cy="60" r="4"/>
+                <path d="M20,80 C30,60 50,40 70,40 S80,60 80,80" fill="none" stroke="url(#circuitGradient)" stroke-width="2.5"/>
+                <path d="M30,70 C40,50 60,30 80,30" fill="none" stroke="url(#circuitGradient)" stroke-width="2.5"/>
+                <path d="M40,60 C50,50 60,50 70,60" fill="none" stroke="url(#circuitGradient)" stroke-width="2.5"/>
+                <circle cx="70" cy="40" r="3.5"/>
+                <circle cx="80" cy="30" r="3.5"/>
+                <circle cx="70" cy="60" r="3.5"/>
             </svg>
         </div>
         <h1 class="hero-title">Aditya Kumar Prasad</h1>
@@ -587,108 +553,63 @@
             const loader = document.querySelector('.loader');
             setTimeout(() => {
                 loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 500);
-            }, 1500);
-            try { initThreeBackground(); } catch (error) {
-                console.error('Failed to initialize Three.js background:', error);
+                setTimeout(() => loader.remove(), 800);
+            }, 1200);
+            try { initStarryBackground(); } catch (error) {
+                console.error('Failed to initialize starry background:', error);
             }
             try {
                 initAnimations();
                 initEventListeners();
                 animateSkillBars();
                 initTerminalEffect();
-                initParallaxOrbs();
-                extendHeroAnimation();
             } catch (error) {
-                console.error('Error in initializing other features:', error);
+                console.error('Error in initializing features:', error);
             }
         });
-        function initThreeBackground() {
+        function initStarryBackground() {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setClearColor(0x000000, 0);
-            document.getElementById('three-bg').appendChild(renderer.domElement);
-            const particlesCount = 200;
-            const particlesGeometry = new THREE.BufferGeometry();
-            const posArray = new Float32Array(particlesCount * 3);
-            const basePositions = new Float32Array(particlesCount * 3);
-            for (let i = 0; i < particlesCount; i++) {
+            renderer.setClearColor(0x03030a, 0);
+            document.getElementById('starry-bg').appendChild(renderer.domElement);
+            const starCount = 500;
+            const starGeometry = new THREE.BufferGeometry();
+            const starPositions = new Float32Array(starCount * 3);
+            const starSizes = new Float32Array(starCount);
+            for (let i = 0; i < starCount; i++) {
                 const i3 = i * 3;
-                posArray[i3] = (Math.random() - 0.5) * 20;
-                posArray[i3 + 1] = (Math.random() - 0.5) * 20;
-                posArray[i3 + 2] = (Math.random() - 0.5) * 20;
-                basePositions[i3] = posArray[i3];
-                basePositions[i3 + 1] = posArray[i3 + 1];
-                basePositions[i3 + 2] = posArray[i3 + 2];
+                starPositions[i3] = (Math.random() - 0.5) * 100;
+                starPositions[i3 + 1] = (Math.random() - 0.5) * 100;
+                starPositions[i3 + 2] = (Math.random() - 0.5) * 100;
+                starSizes[i] = Math.random() * 0.05 + 0.01;
             }
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.03,
-                color: 0x4a6a7a, /* Darker cyan for blackish theme */
+            starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            starGeometry.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
+            const starMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0xe0e0e0,
                 transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                vertexColors: false,
+                sizeAttenuation: true
             });
-            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particles);
-            const lineMaterial = new THREE.LineBasicMaterial({
-                color: 0x4a6a7a, /* Matching darker cyan */
-                transparent: true,
-                opacity: 0.25
-            });
-            const maxConnections = 1000;
-            const lineGeometry = new THREE.BufferGeometry();
-            const linePositions = new Float32Array(maxConnections * 6);
-            lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-            const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-            scene.add(lines);
-            camera.position.z = 15;
-            let mouseX = 0;
-            let mouseY = 0;
-            document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            }, { passive: true });
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+            camera.position.z = 50;
             let time = 0;
             function animate() {
                 requestAnimationFrame(animate);
-                time += 0.02;
-                for (let i = 0; i < particlesCount; i++) {
+                time += 0.01;
+                for (let i = 0; i < starCount; i++) {
                     const i3 = i * 3;
-                    posArray[i3] = basePositions[i3] + Math.sin(time + i) * 0.5;
-                    posArray[i3 + 1] = basePositions[i3 + 1] + Math.cos(time + i * 0.5) * 0.5;
-                    posArray[i3 + 2] = basePositions[i3 + 2] + Math.sin(time + i * 0.3) * 0.5;
+                    starPositions[i3 + 2] += 0.02;
+                    if (starPositions[i3 + 2] > 50) starPositions[i3 + 2] -= 100;
                 }
-                particlesGeometry.attributes.position.needsUpdate = true;
-                let lineIndex = 0;
-                const maxDistance = 2;
-                for (let i = 0; i < particlesCount; i++) {
-                    for (let j = i + 1; j < particlesCount; j++) {
-                        if (lineIndex >= maxConnections) break;
-                        const i3 = i * 3;
-                        const j3 = j * 3;
-                        const dx = posArray[i3] - posArray[j3];
-                        const dy = posArray[i3 + 1] - posArray[j3 + 1];
-                        const dz = posArray[i3 + 2] - posArray[j3 + 2];
-                        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                        if (distance < maxDistance) {
-                            linePositions[lineIndex * 6] = posArray[i3];
-                            linePositions[lineIndex * 6 + 1] = posArray[i3 + 1];
-                            linePositions[lineIndex * 6 + 2] = posArray[i3 + 2];
-                            linePositions[lineIndex * 6 + 3] = posArray[j3];
-                            linePositions[lineIndex * 6 + 4] = posArray[j3 + 1];
-                            linePositions[lineIndex * 6 + 5] = posArray[j3 + 2];
-                            lineIndex++;
-                        }
-                    }
-                }
-                lineGeometry.setDrawRange(0, lineIndex * 2);
-                lineGeometry.attributes.position.needsUpdate = true;
-                camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
-                camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
-                particles.rotation.y += 0.001;
+                starGeometry.attributes.position.needsUpdate = true;
+                stars.rotation.y += 0.0005;
                 renderer.render(scene, camera);
             }
             animate();
@@ -702,16 +623,16 @@
             gsap.registerPlugin(ScrollTrigger);
             gsap.utils.toArray('.fade-in').forEach((section) => {
                 gsap.fromTo(section,
-                    { opacity: 0, y: 100 },
+                    { opacity: 0, y: 50 },
                     {
                         opacity: 1,
                         y: 0,
-                        duration: 1.2,
-                        ease: "power3.out",
+                        duration: 1,
+                        ease: "power2.out",
                         scrollTrigger: {
                             trigger: section,
-                            start: "top 85%",
-                            end: "bottom 15%",
+                            start: "top 80%",
+                            end: "bottom 20%",
                             toggleActions: "play none none none",
                             once: true
                         }
@@ -720,17 +641,17 @@
             });
             gsap.utils.toArray('.card').forEach((card, index) => {
                 gsap.fromTo(card,
-                    { opacity: 0, y: 50, scale: 0.95 },
+                    { opacity: 0, y: 30, scale: 0.98 },
                     {
                         opacity: 1,
                         y: 0,
                         scale: 1,
-                        duration: 0.9,
-                        delay: index * 0.1,
-                        ease: "back.out(1.7)",
+                        duration: 0.8,
+                        delay: index * 0.15,
+                        ease: "power2.out",
                         scrollTrigger: {
                             trigger: card,
-                            start: "top 90%",
+                            start: "top 85%",
                             toggleActions: "play none none none",
                             once: true
                         }
@@ -738,21 +659,11 @@
                 );
             });
             const tl = gsap.timeline();
-            tl.from('.hero-avatar', { scale: 0, rotation: 180, duration: 1.2, ease: "elastic.out(1, 0.5)" })
-              .from('.hero-title', { opacity: 0, y: 50, duration: 0.9, ease: "power3.out" }, "-=0.5")
-              .from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.5")
-              .from('.hero-cta', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.3")
-              .from('.social-grid', { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, "-=0.3");
-            gsap.to('.hero', {
-                yPercent: -30,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: '.hero',
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            });
+            tl.from('.hero-avatar', { scale: 0, duration: 1, ease: "back.out(1.5)" })
+              .from('.hero-title', { opacity: 0, y: 40, duration: 0.8, ease: "power2.out" }, "-=0.4")
+              .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.7, ease: "power2.out" }, "-=0.4")
+              .from('.hero-cta', { opacity: 0, y: 20, duration: 0.7, ease: "power2.out" }, "-=0.3")
+              .from('.social-grid', { opacity: 0, y: 20, duration: 0.7, ease: "power2.out" }, "-=0.3");
         }
         function initEventListeners() {
             const navToggle = document.querySelector('.nav-toggle');
@@ -782,14 +693,6 @@
                 const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
                 progressBar.style.width = scrollPercent + '%';
             });
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    gsap.to(card, { scale: 1.02, duration: 0.25, ease: "power2.out" });
-                });
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, { scale: 1, duration: 0.25, ease: "power2.out" });
-                });
-            });
             document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     const ripple = document.createElement('span');
@@ -802,7 +705,7 @@
                     ripple.style.top = y + 'px';
                     ripple.classList.add('ripple');
                     this.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 600);
+                    setTimeout(() => ripple.remove(), 500);
                 });
             });
         }
@@ -813,11 +716,11 @@
                     if (entry.isIntersecting) {
                         const bar = entry.target;
                         const width = bar.getAttribute('data-width');
-                        gsap.to(bar, { width: width + '%', duration: 2, ease: "power3.out", delay: 0.3 });
+                        gsap.to(bar, { width: width + '%', duration: 1.5, ease: "power2.out" });
                         observer.unobserve(bar);
                     }
                 });
-            });
+            }, { threshold: 0.1 });
             skillBars.forEach(bar => observer.observe(bar));
         }
         function initTerminalEffect() {
@@ -829,7 +732,7 @@
                 '$ cat interests.txt',
                 '> DevOps | AWS Solutions | Cloud Computing',
                 '$ status',
-                '> Currently building the future, one block at a time...'
+                '> Building the future, one cloud at a time...'
             ];
             let currentLine = 0;
             let currentChar = 0;
@@ -843,9 +746,9 @@
                     output += '\n';
                     currentChar = 0;
                     currentLine++;
-                    setTimeout(typeLine, 500);
+                    setTimeout(typeLine, 400);
                 } else {
-                    setTimeout(typeLine, 50);
+                    setTimeout(typeLine, 40);
                 }
             }
             const observer = new IntersectionObserver((entries) => {
@@ -857,43 +760,7 @@
                 });
             }, { threshold: 0.1 });
             const terminal = document.querySelector('.terminal');
-            if (terminal) {
-                observer.observe(terminal);
-                const rect = terminal.getBoundingClientRect();
-                if (rect.top >= 0 && rect.top <= window.innerHeight * 0.9) {
-                    typeLine();
-                    observer.unobserve(terminal);
-                }
-            }
-        }
-        function initParallaxOrbs() {
-            const orbs = Array.from(document.querySelectorAll('.fx-orb'));
-            if (!orbs.length) return;
-            let rx = 0, ry = 0;
-            let targetX = 0, targetY = 0;
-            const lerp = (a, b, n) => (1 - n) * a + n * b;
-            function onMove(e) {
-                const w = window.innerWidth, h = window.innerHeight;
-                targetX = (e.clientX / w - 0.5) * 2;
-                targetY = (e.clientY / h - 0.5) * 2;
-            }
-            function tick() {
-                rx = lerp(rx, targetX, 0.08);
-                ry = lerp(ry, targetY, 0.08);
-                for (const orb of orbs) {
-                    const d = parseFloat(orb.dataset.depth || 10);
-                    orb.style.transform = `translate(${rx * d}px, ${ry * d}px)`;
-                }
-                requestAnimationFrame(tick);
-            }
-            window.addEventListener('mousemove', onMove, { passive: true });
-            tick();
-        }
-        function extendHeroAnimation() {
-            if (!window.gsap) return;
-            const tl2 = gsap.timeline({ defaults: { ease: 'sine.inOut' } });
-            tl2.to('.hero-avatar', { yPercent: -1, duration: 3.5, repeat: -1, yoyo: true }, 0);
-            tl2.to('.hero-cta', { scale: 1.005, duration: 2.4, repeat: -1, yoyo: true }, 0.3);
+            if (terminal) observer.observe(terminal);
         }
     </script>
 </body>
