@@ -33,6 +33,7 @@
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none;
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
@@ -69,6 +70,28 @@
         @keyframes waveShift {
             0% { background-position: 0 0; }
             100% { background-position: 200% 200%; }
+        }
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--primary), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+            will-change: transform;
+        }
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, var(--accent), var(--primary), transparent);
+        }
+        .cursor.click {
+            transform: scale(0);
+            transition: transform 0.2s ease;
         }
         /* Navigation */
         .nav-container {
@@ -113,6 +136,11 @@
             margin-bottom: 2rem; position: relative; overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
             animation: glowPulse 4s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            will-change: transform;
+        }
+        .hero-avatar:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05);
         }
         @keyframes glowPulse {
             0%, 100% { box-shadow: 0 0 20px rgba(0, 180, 216, 0.5); }
@@ -169,7 +197,7 @@
             background: transparent; color: var(--primary); border: 2px solid var(--primary);
         }
         .btn:hover {
-            transform: translateY(-2px); box veinte: var(--shadow); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+            transform: translateY(-2px) rotateX(5deg); box-shadow: var(--shadow), 0 0 15px rgba(0, 180, 216, 0.4);
         }
         .section {
             min-height: 100vh; padding: 4rem 1.5rem; display: flex; flex-direction: column; justify-content: center;
@@ -191,9 +219,12 @@
             background: var(--bg-card); backdrop-filter: blur(10px);
             border: 1px solid var(--border); border-radius: 15px; padding: 1.8rem;
             transition: all 0.3s ease; position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            will-change: transform;
         }
         .card:hover {
-            transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
+            transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
             border-color: var(--primary);
         }
         .card::before {
@@ -221,9 +252,12 @@
             background: var(--bg-card); backdrop-filter: blur(10px);
             border: 1px solid var(--border); border-radius: 15px; padding: 1.8rem; margin-bottom: 1.5rem;
             transition: all 0.3s ease; position: relative;
+            transform-style: preserve-3d;
+            will-change: transform;
         }
         .project-card:hover {
-            transform: scale(1.03); box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
+            transform: rotateY(5deg) rotateX(3deg) scale(1.03);
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.5);
         }
         .project-tech {
             display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem;
@@ -234,7 +268,7 @@
             transition: all 0.2s ease; box-shadow: 0 0 10px rgba(0, 180, 216, 0.2);
         }
         .tech-tag:hover {
-            transform: translateY(-2px); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+            transform: translateY(-2px) rotate(5deg); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
         }
         .social-grid {
             display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem;
@@ -246,7 +280,7 @@
             text-decoration: none; transition: all 0.3s ease; position: relative;
         }
         .social-link:hover {
-            transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
+            transform: scale(1.1) rotate(10deg); box-shadow: 0 0 15px rgba(0, 180, 216, 0.4);
         }
         .social-link svg { width: 22px; height: 22px; }
         .terminal {
@@ -273,9 +307,10 @@
             .section-title { font-size: 2rem; }
             .card-grid { grid-template-columns: 1fr; }
             .social-grid { gap: 1rem; }
+            .cursor { display: none; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .wave-overlay, .hero-avatar, .card, .skill-item, .tech-tag { animation: none !important; transition: none !important; }
+            .wave-overlay, .hero-avatar, .card, .skill-item, .tech-tag, .cursor { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
@@ -286,6 +321,7 @@
     <div class="progress-bar"></div>
     <div class="wave-overlay" aria-hidden="true"></div>
     <div id="starry-bg"></div>
+    <div class="cursor"></div>
     <nav class="nav-container">
         <div class="nav-toggle">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -357,9 +393,8 @@
                 <strong>DevOps, Cloud, and Automation</strong>. I've worked on projects involving
                 <strong>AWS, Docker, Jenkins, and CI/CD pipelines</strong>—deploying scalable applications and
                 automating workflows to improve efficiency.<br><br>
-                I enjoy solving problems with Linux, scripting, and containerization, and I'm passionate about
-                creating reliable, secure, and production-ready systems. Always curious and eager to learn,
-                I'm on a journey to grow as a DevOps engineer while contributing to impactful projects.
+                Automating the boring, scaling the important.
+                DevOps, cloud, and relentless execution.
             </p>
             <div class="terminal">
                 <div class="terminal-header">
@@ -378,7 +413,7 @@
         <div class="card-grid">
             <div class="card">
                 <h3 style="color: var(--primary); margin-bottom: 1rem;">Bachelor's in Computer Applications</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">2023 - 2026</p>
+                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Sept 2023 - July 2026</p>
                 <p><a href="https://www.gec.edu.in/" target="_blank" style="color: var(--primary);">Gandhi National College, Bhubaneswar</a></p>
                 <p><a href="https://utkaluniversity.ac.in/" target="_blank" style="color: var(--secondary);">Utkal University</a></p>
             </div>
@@ -391,6 +426,25 @@
     </section>
     <section id="experience" class="section fade-in">
         <h2 class="section-title">Experience</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">DevOps Engineer Intern</h3>
+                <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">PearlThoughts Pvt. Ltd</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">December 2025 - January 2026</p>
+                <ul style="list-style: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                    <li>Worked on containerizing and deploying Strapi applications using Docker and AWS cloud services.</li>
+                    <li>Designed and implemented CI/CD pipelines using GitHub Actions for automated build, image tagging, and deployment.</li>
+                    <li>Provisioned and managed cloud infrastructure using Terraform, ensuring repeatable and scalable deployments.</li>
+                    <li>Deployed applications on AWS EC2 and ECS Fargate, handling networking, security groups, and load balancing.</li>
+                    <li>Implemented Blue/Green deployments with AWS CodeDeploy to achieve zero-downtime application updates.</li>
+                    <li>Configured Application Load Balancer (ALB) with multiple target groups for traffic switching between deployments.</li>
+                    <li>Enabled CloudWatch logging and monitoring for application health, performance metrics, and troubleshooting.</li>
+                    <li>Optimized infrastructure costs by migrating workloads to AWS Fargate Spot.</li>
+                    <li>Collaborated with team members, documented workflows, and created Loom demos for knowledge sharing.</li>
+                    <li>Followed DevOps best practices including version control, automation, monitoring, and rollback strategies.</li>
+                </ul>
+            </div>
+        </div>
         <div class="card-grid">
             <div class="card">
                 <h3 style="color: var(--primary); margin-bottom: 0.5rem;">DevOps Intern</h3>
@@ -414,112 +468,189 @@
         </div>
     </section>
     <section id="skills" class="section fade-in">
-        <h2 class="section-title">Technical Skills</h2>
-        <div class="card-grid">
-            <div class="card">
-                <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Programming Languages</h3>
-                <div class="skill-item">
-                    <span>Python</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>C/C++</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>Shell(Scripting)</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>SQL</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-                </div>
-            </div>
-            <div class="card">
-                <h3 style="color: var(--secondary); margin-bottom: 1.5rem;">Cloud & DevOps</h3>
-                <div class="skill-item">
-                    <span>Amazon EC2</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>Amazon S3</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>AWS Lambda</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>Git & GitHub</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>Linux</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>VCS</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>MySQL</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-                </div>
-            </div>
-            <div class="card">
-                <h3 style="color: var(--accent); margin-bottom: 1.5rem;">Core Skills</h3>
-                <div class="skill-item">
-                    <span>Data Structures & Algorithms</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
-                </div>
-                <div class="skill-item">
-                    <span>Computer Networks</span>
-                    <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="professional-skills" class="section fade-in">
-        <h2 class="section-title">Professional Skills</h2>
+        
+    <h2 class="section-title">Technical Skills</h2>
+
+    <div class="card-grid">
+
+        <!-- Programming & Scripting -->
         <div class="card">
+            <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Programming & Scripting</h3>
+
             <div class="skill-item">
-                <span>Team Work</span>
+                <span>Python</span>
                 <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
             </div>
+
             <div class="skill-item">
-                <span>Problem-Solving</span>
+                <span>C / C++</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>JavaScript</span>
                 <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
             </div>
+
             <div class="skill-item">
-                <span>Communication</span>
+                <span>Bash Scripting</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>SQL (MySQL / PostgreSQL)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+        </div>
+
+        <!-- Cloud & DevOps -->
+        <div class="card">
+            <h3 style="color: var(--secondary); margin-bottom: 1.5rem;">Cloud & DevOps</h3>
+
+            <div class="skill-item">
+                <span>AWS EC2</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>AWS ECS (Fargate & Spot)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Amazon ECR</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Application Load Balancer (ALB)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>AWS CloudWatch</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>AWS CodeDeploy</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>AWS IAM</span>
                 <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
             </div>
         </div>
-    </section>
+
+        <!-- DevOps Tools & Infra -->
+        <div class="card">
+            <h3 style="color: var(--accent); margin-bottom: 1.5rem;">DevOps, IaC & Systems</h3>
+
+            <div class="skill-item">
+                <span>Docker & Docker Compose</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Terraform (Infrastructure as Code)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>CI/CD (GitHub Actions, Jenkins)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Linux / Unix Administration</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Git & GitHub</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Nginx (Reverse Proxy)</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+
+            <div class="skill-item">
+                <span>Strapi CMS</span>
+                <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="professional-skills" class="section fade-in">
+    <h2 class="section-title">Professional Skills</h2>
+
+    <div class="card">
+        <div class="skill-item">
+            <span>Problem Solving</span>
+            <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+        </div>
+
+        <div class="skill-item">
+            <span>Team Collaboration</span>
+            <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+        </div>
+
+        <div class="skill-item">
+            <span>Documentation & Knowledge Sharing</span>
+            <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+        </div>
+
+        <div class="skill-item">
+            <span>Communication</span>
+            <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+        </div>
+    </div>
+</section>
+
     <section id="projects" class="section fade-in">
         <h2 class="section-title">Featured Projects</h2>
         <div class="project-card">
-            <h3>
-                <a href="https://attnd-mngmt.netlify.app/" target="_blank" style="color: var(--primary); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--primary)'">
-                    Cloud Based Attendance Management System
-                </a>
-            </h3>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Developed a scalable cloud-based system to automate attendance tracking with support of AWS tools.
-                Delivered secure data storage, real-time analytics, and automated notifications for attendance exceptions.
-                Provided intuitive web and mobile interfaces for multi-device access and administrative control.
-            </p>
-            <div class="project-tech">
-                <span class="tech-tag">AWS</span>
-                <span class="tech-tag">GitHub</span>
-                <span class="tech-tag">SQL/MySQL</span>
-                <span class="tech-tag">Docker</span>
-                <span class="tech-tag">Jenkins</span>
-            </div>
-            <div class="project-links" style="margin-top: 1rem;">
-                <a href="https://github.com/dityakp/Aditya-portfolio" target="_blank" class="btn btn-primary" aria-label="View Cloud Based Attendance Management System Source Code on GitHub">Source Code</a>
-            </div>
-        </div>
+    <h3>
+        <a href="https://github.com/dityakp/strapi-blue-green/actions" target="_blank"
+           style="color: var(--primary); text-decoration: none; transition: color 0.3s ease;"
+           onmouseover="this.style.color='var(--accent)'"
+           onmouseout="this.style.color='var(--primary)'">
+            Automated Blue/Green Deployment of Strapi CMS on AWS Fargate
+        </a>
+    </h3>
+
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+        Designed and deployed a production-ready Strapi CMS using a containerized architecture with Docker, PostgreSQL, and Nginx.
+        Provisioned complete AWS infrastructure using Terraform, including ECS clusters, ALB, security groups, and networking.
+        Implemented Blue/Green deployments using AWS CodeDeploy to achieve zero-downtime releases with seamless traffic shifting.
+        Automated CI/CD pipelines using GitHub Actions for Docker image build, tagging, ECR push, and infrastructure deployment.
+        Optimized costs by leveraging AWS Fargate Spot and enabled CloudWatch logging and monitoring for application health.
+    </p>
+
+    <div class="project-tech">
+        <span class="tech-tag">AWS ECS Fargate</span>
+        <span class="tech-tag">Terraform</span>
+        <span class="tech-tag">Docker</span>
+        <span class="tech-tag">GitHub Actions</span>
+        <span class="tech-tag">CodeDeploy</span>
+        <span class="tech-tag">ALB</span>
+        <span class="tech-tag">CloudWatch</span>
+    </div>
+
+    <div class="project-links" style="margin-top: 1rem;">
+        <a href="https://github.com/dityakp/strapi-blue-green" target="_blank"
+           class="btn btn-primary"
+           aria-label="View Strapi Blue Green Deployment Source Code on GitHub">
+            Source Code
+        </a>
+    </div>
+</div>
+
         <div class="project-card">
             <h3>
                 <a href="https://github.com/dityakp/django-todo" target="_blank" style="color: var(--primary); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--primary)'">
@@ -544,9 +675,31 @@
                 <a href="https://github.com/dityakp/Aditya-portfolio" target="_blank" class="btn btn-primary" aria-label="View Cloud Based Attendance Management System Source Code on GitHub">Source Code</a>
             </div>
         </div>
+        <div class="project-card">
+            <h3>
+                <a href="https://attnd-mngmt.netlify.app/" target="_blank" style="color: var(--primary); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--primary)'">
+                    Cloud Based Attendance Management System
+                </a>
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Developed a scalable cloud-based system to automate attendance tracking with support of AWS tools.
+                Delivered secure data storage, real-time analytics, and automated notifications for attendance exceptions.
+                Provided intuitive web and mobile interfaces for multi-device access and administrative control.
+            </p>
+            <div class="project-tech">
+                <span class="tech-tag">AWS</span>
+                <span class="tech-tag">GitHub</span>
+                <span class="tech-tag">SQL/MySQL</span>
+                <span class="tech-tag">Docker</span>
+                <span class="tech-tag">Jenkins</span>
+            </div>
+            <div class="project-links" style="margin-top: 1rem;">
+                <a href="https://github.com/dityakp/attend-mngmnt" target="_blank" class="btn btn-primary" aria-label="View Cloud Based Attendance Management System Source Code on GitHub">Source Code</a>
+            </div>
+        </div>
     </section>
     <footer style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-        <p>© 2025 Aditya Kumar Prasad. All rights reserved.</p>
+        <p>© 2026 Aditya Kumar Prasad. All rights reserved.</p>
     </footer>
     <script>
         window.addEventListener('load', () => {
@@ -561,15 +714,46 @@
             try {
                 initAnimations();
                 initEventListeners();
+                initMouseInteractions();
                 animateSkillBars();
                 initTerminalEffect();
             } catch (error) {
                 console.error('Error in initializing features:', error);
             }
         });
+        let mouseX = 0, mouseY = 0;
+        function initMouseInteractions() {
+            const cursor = document.querySelector('.cursor');
+            const hoverElements = document.querySelectorAll('a, .btn, .card, .project-card, .hero-avatar, .tech-tag, .nav-toggle, .skill-item');
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                gsap.to(cursor, { duration: 0.1, left: mouseX - 10, top: mouseY - 10 });
+            });
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+                el.addEventListener('mousedown', () => cursor.classList.add('click'));
+                el.addEventListener('mouseup', () => cursor.classList.remove('click'));
+            });
+            // Update starry camera on mouse move
+            document.addEventListener('mousemove', (e) => {
+                if (window.starsCamera) {
+                    const xPercent = (e.clientX / window.innerWidth) * 2 - 1;
+                    const yPercent = (e.clientY / window.innerHeight) * 2 - 1;
+                    gsap.to(window.starsCamera.rotation, {
+                        y: xPercent * 0.05,
+                        x: -yPercent * 0.05,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        }
         function initStarryBackground() {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            window.starsCamera = camera;
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(0x03030a, 0);
