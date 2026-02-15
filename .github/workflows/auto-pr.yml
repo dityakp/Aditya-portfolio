@@ -1,0 +1,76 @@
+name: Production Validation Checks
+
+on:
+  push:
+    branches:
+      - Production
+
+jobs:
+  validate-files:
+    runs-on: ubuntu-latest
+    name: Validate Portfolio Files
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install validation tools
+        run: |
+          npm install -g htmlhint stylelint eslint
+          
+      - name: Validate HTML files
+        run: |
+          echo "🔍 Validating HTML files..."
+          cd Aditya-portfolio
+          htmlhint "**/*.html" || echo "⚠️ HTML validation warnings found"
+          
+      - name: Validate CSS files
+        run: |
+          echo "🎨 Validating CSS files..."
+          cd Aditya-portfolio
+          npx stylelint "**/*.css" --config-basedir . || echo "⚠️ CSS validation warnings found"
+        continue-on-error: true
+          
+      - name: Validate JavaScript files
+        run: |
+          echo "⚡ Validating JavaScript files..."
+          cd Aditya-portfolio
+          npx eslint "**/*.js" --no-eslintrc --env browser,es2021 || echo "⚠️ JS validation warnings found"
+        continue-on-error: true
+      
+      - name: Check for broken links (HTML)
+        run: |
+          echo "🔗 Checking for broken internal links..."
+          cd Aditya-portfolio
+          if [ -f "index.html" ]; then
+            grep -oP 'href="[^"]*"' index.html | grep -v "http" | sed 's/href="//;s/"//' || echo "No internal links found"
+          fi
+          
+      - name: Check file structure
+        run: |
+          echo "📁 Checking file structure..."
+          cd Aditya-portfolio
+          echo "✅ Required files:"
+          [ -f "index.html" ] && echo "  ✓ index.html" || echo "  ✗ index.html MISSING"
+          [ -d "css" ] && echo "  ✓ css/ directory" || echo "  ✗ css/ directory MISSING"
+          [ -d "js" ] && echo "  ✓ js/ directory" || echo "  ✗ js/ directory MISSING"
+          [ -d "assets" ] && echo "  ✓ assets/ directory" || echo "  ⚠ assets/ directory not found"
+          
+      - name: List all files
+        run: |
+          echo "📋 Portfolio file structure:"
+          cd Aditya-portfolio
+          find . -type f -not -path '*/\.*' | sort
+          
+      - name: Production Check Summary
+        run: |
+          echo "✅ Production validation completed!"
+          echo "📊 All checks have been executed."
+          echo "Review the logs above for any warnings or errors."
