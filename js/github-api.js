@@ -5,18 +5,19 @@
 // Configuration
 const GITHUB_CONFIG = {
     username: 'dityakp',
-    // Only show pinned repos (those in manualRepos or with featuredTopic)
-    showOnlyPinned: true,
+    // Show all repos except those already in Featured Projects section
+    showOnlyPinned: false,
     featuredTopic: 'portfolio-featured',
-    manualRepos: [
-        // Add your pinned repository names here
+    // Repos already shown in Featured Projects - exclude from More Projects section
+    excludeRepos: [
         'strapi-blue-green',
-        'django-todo',
-        'attend-mngmnt'
+        'event-driven-reporting-pipeline',
+        'cloudforge'
     ],
     excludeForked: true,
     excludeArchived: true,
     sortBy: 'updated', // 'updated', 'stars', 'created'
+    maxRepos: 12, // Maximum number of repos to display
     cacheTimeout: 3600000 // 1 hour in milliseconds
 };
 
@@ -130,27 +131,29 @@ function filterRepos(repos) {
             return false;
         }
 
+        // Exclude repos already shown in Featured Projects section
+        if (GITHUB_CONFIG.excludeRepos.includes(repo.name)) {
+            return false;
+        }
+
         return true;
     });
 
-    // Get pinned repos (those with featured topic or in manual list)
-    const pinned = filtered.filter(repo =>
-        repo.topics?.includes(GITHUB_CONFIG.featuredTopic) ||
-        GITHUB_CONFIG.manualRepos.includes(repo.name)
-    );
+    // Sort by the configured field
+    filtered.sort((a, b) => {
+        if (GITHUB_CONFIG.sortBy === 'updated') {
+            return new Date(b.updated_at) - new Date(a.updated_at);
+        } else if (GITHUB_CONFIG.sortBy === 'stars') {
+            return b.stargazers_count - a.stargazers_count;
+        } else if (GITHUB_CONFIG.sortBy === 'created') {
+            return new Date(b.created_at) - new Date(a.created_at);
+        }
+        return 0;
+    });
 
-    // If showOnlyPinned is true, return only pinned repos
-    if (GITHUB_CONFIG.showOnlyPinned) {
-        return pinned;
-    }
-
-    // Otherwise, prioritize pinned repos then show others
-    if (pinned.length > 0) {
-        const nonPinned = filtered.filter(repo =>
-            !repo.topics?.includes(GITHUB_CONFIG.featuredTopic) &&
-            !GITHUB_CONFIG.manualRepos.includes(repo.name)
-        );
-        filtered = [...pinned, ...nonPinned];
+    // Limit to maxRepos if configured
+    if (GITHUB_CONFIG.maxRepos && filtered.length > GITHUB_CONFIG.maxRepos) {
+        filtered = filtered.slice(0, GITHUB_CONFIG.maxRepos);
     }
 
     return filtered;
@@ -171,9 +174,7 @@ async function formatRepoData(repo) {
         language: repo.language,
         topics: repo.topics || [],
         updatedAt: new Date(repo.updated_at),
-        createdAt: new Date(repo.created_at),
-        isFeatured: repo.topics?.includes(GITHUB_CONFIG.featuredTopic) ||
-            GITHUB_CONFIG.manualRepos.includes(repo.name)
+        createdAt: new Date(repo.created_at)
     };
 }
 
@@ -227,7 +228,6 @@ function createProjectCard(repo, index) {
                     ${repo.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </a>
             </h3>
-            ${repo.isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ''}
         </div>
         
         <p class="github-project-description">${repo.description}</p>

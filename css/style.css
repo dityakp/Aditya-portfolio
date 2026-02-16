@@ -483,6 +483,7 @@ body {
     background: radial-gradient(circle at 50% 50%, rgba(0, 180, 216, 0.1), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .card:hover::before {
@@ -641,6 +642,7 @@ body {
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 15px;
+    pointer-events: none;
 }
 
 .github-project-card:hover::before {
