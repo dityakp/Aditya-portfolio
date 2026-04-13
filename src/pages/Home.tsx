@@ -4,6 +4,45 @@ import { Github, Linkedin, Terminal, Database, Cloud, Star, GitFork, ExternalLin
 import { Link } from 'react-router-dom';
 import avatarImg from '../assets/avatar.png';
 
+const ScrollParallax = ({ children, offset = 50, direction = 'y', speed = 1, className = "" }: { children: React.ReactNode, offset?: number, direction?: 'y' | 'x', speed?: number, className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
+  const transform = useTransform(smooth, [0, 1], [offset * speed, -offset * speed]);
+  return (
+    <motion.div ref={ref} style={{ [direction]: transform }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
+
+const ScrollReveal = ({ children, direction = 'up', className = "" }: { children: React.ReactNode, direction?: 'up' | 'left' | 'right', className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
+  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
+  const y = direction === 'up' ? useTransform(smooth, [0, 1], [100, 0]) : 0;
+  const x = direction === 'left' ? useTransform(smooth, [0, 1], [-100, 0]) : direction === 'right' ? useTransform(smooth, [0, 1], [100, 0]) : 0;
+  const opacity = useTransform(smooth, [0, 1], [0, 1]);
+  return (
+    <motion.div ref={ref} style={{ x, y, opacity }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
+
+const ScrollScale = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
+  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
+  const scale = useTransform(smooth, [0, 1], [0.8, 1]);
+  const opacity = useTransform(smooth, [0, 1], [0.3, 1]);
+  return (
+    <motion.div ref={ref} style={{ scale, opacity }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
+
 interface Repo {
   id: number;
   name: string;
@@ -139,13 +178,7 @@ export default function Home() {
         <motion.div style={{ y: yAboutBg }} className="absolute top-0 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           SYS
         </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10"
-        >
+        <ScrollReveal direction="up" className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
           <div className="lg:col-span-4">
             <h2 className="text-4xl md:text-6xl font-sans mb-6">SYS_INFO</h2>
             <div className="font-mono text-sm text-muted space-y-4">
@@ -166,20 +199,14 @@ export default function Home() {
                 { val: "26", label: "Grad Year" },
                 { val: "24/7", label: "Uptime Mindset" }
               ].map((stat, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
+                <ScrollParallax key={i} direction="y" offset={30} speed={1 + (i * 0.5)}>
                   <div className="text-4xl md:text-5xl font-sans text-accent mb-2">{stat.val}</div>
                   <div className="text-[10px] md:text-xs text-muted uppercase tracking-widest">{stat.label}</div>
-                </motion.div>
+                </ScrollParallax>
               ))}
             </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </section>
 
       {/* GitHub Live Integration */}
@@ -187,14 +214,9 @@ export default function Home() {
         <motion.div style={{ y: yGithubBg }} className="absolute top-10 left-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           GIT
         </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10"
-        >
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6">
+        
+        <div className="relative z-10">
+          <ScrollReveal direction="left" className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6">
             <div>
               <h2 className="text-5xl md:text-8xl font-sans text-stroke">GITHUB</h2>
               <p className="font-mono text-accent mt-2 md:mt-4 flex items-center gap-2 text-sm md:text-base">
@@ -205,16 +227,11 @@ export default function Home() {
             <a href="https://github.com/dityakp" target="_blank" rel="noopener noreferrer" className="font-mono text-xs md:text-sm border border-fg px-4 py-2 md:px-6 md:py-3 hover:bg-fg hover:text-bg transition-colors uppercase flex items-center gap-2">
               <Github size={16} /> View Profile
             </a>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Contributions Graph */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-12 border border-surface bg-bg p-4 md:p-8"
-            >
+            <ScrollScale className="lg:col-span-12 border border-surface bg-bg p-4 md:p-8">
               <h3 className="font-mono text-xs md:text-sm text-muted mb-4 md:mb-6 uppercase tracking-widest">Contribution Heatmap</h3>
               <div className="w-full overflow-x-auto pb-4">
                 <img 
@@ -223,51 +240,48 @@ export default function Home() {
                   className="min-w-[600px] md:min-w-[700px] w-full opacity-90 hover:opacity-100 transition-opacity"
                 />
               </div>
-            </motion.div>
+            </ScrollScale>
 
             {/* Recent Repositories */}
-            <div className="lg:col-span-12">
+            <div className="lg:col-span-12 mt-8">
               <h3 className="font-mono text-xs md:text-sm text-muted mb-4 md:mb-6 uppercase tracking-widest">Recent Deployments & Repos</h3>
               {loadingRepos ? (
                 <div className="font-mono text-accent animate-pulse text-sm">Fetching repositories...</div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   {repos.map((repo, i) => (
-                    <motion.a
-                      href={repo.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      key={repo.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      className="block border border-surface bg-bg p-4 md:p-6 hover:border-accent transition-colors group relative"
-                    >
-                      <div className="absolute top-4 right-4 md:top-6 md:right-6 text-muted group-hover:text-accent transition-colors">
-                        <ExternalLink size={16} className="md:w-5 md:h-5" />
-                      </div>
-                      <h4 className="text-lg md:text-xl font-sans mb-2 md:mb-3 pr-8 truncate">{repo.name}</h4>
-                      <p className="font-mono text-xs md:text-sm text-muted mb-4 md:mb-6 line-clamp-2 h-8 md:h-10">
-                        {repo.description || "No description provided."}
-                      </p>
-                      <div className="flex items-center gap-3 md:gap-4 font-mono text-[10px] md:text-xs text-muted">
-                        {repo.language && (
-                          <span className="flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent"></span>
-                            {repo.language}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1"><Star size={12} className="md:w-[14px] md:h-[14px]" /> {repo.stargazers_count}</span>
-                        <span className="flex items-center gap-1"><GitFork size={12} className="md:w-[14px] md:h-[14px]" /> {repo.forks_count}</span>
-                      </div>
-                    </motion.a>
+                    <ScrollParallax key={repo.id} offset={40} speed={i % 2 === 0 ? 1 : 1.5}>
+                      <motion.a
+                        href={repo.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block border border-surface bg-bg p-4 md:p-6 hover:border-accent transition-colors group relative"
+                      >
+                        <div className="absolute top-4 right-4 md:top-6 md:right-6 text-muted group-hover:text-accent transition-colors">
+                          <ExternalLink size={16} className="md:w-5 md:h-5" />
+                        </div>
+                        <h4 className="text-lg md:text-xl font-sans mb-2 md:mb-3 pr-8 truncate">{repo.name}</h4>
+                        <p className="font-mono text-xs md:text-sm text-muted mb-4 md:mb-6 line-clamp-2 h-8 md:h-10">
+                          {repo.description || "No description provided."}
+                        </p>
+                        <div className="flex items-center gap-3 md:gap-4 font-mono text-[10px] md:text-xs text-muted">
+                          {repo.language && (
+                            <span className="flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent"></span>
+                              {repo.language}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1"><Star size={12} className="md:w-[14px] md:h-[14px]" /> {repo.stargazers_count}</span>
+                          <span className="flex items-center gap-1"><GitFork size={12} className="md:w-[14px] md:h-[14px]" /> {repo.forks_count}</span>
+                        </div>
+                      </motion.a>
+                    </ScrollParallax>
                   ))}
                 </div>
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Projects */}
@@ -275,14 +289,11 @@ export default function Home() {
         <motion.div style={{ y: yProjectsBg }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           PRJ
         </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10"
-        >
-          <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">PROJECTS</h2>
+        
+        <div className="relative z-10">
+          <ScrollReveal direction="up">
+            <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">PROJECTS</h2>
+          </ScrollReveal>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {[
@@ -311,32 +322,27 @@ export default function Home() {
                 link: "https://github.com/dityakp"
               }
             ].map((project, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group border border-surface bg-surface/20 p-6 md:p-8 hover:border-accent transition-colors relative"
-              >
-                <a href={project.link} target="_blank" rel="noopener noreferrer" className="absolute top-6 right-6 text-muted group-hover:text-accent transition-colors">
-                  <ExternalLink size={20} />
-                </a>
-                <h3 className="text-2xl md:text-3xl font-sans mb-4 pr-8">{project.title}</h3>
-                <p className="font-mono text-sm md:text-base text-muted mb-8 leading-relaxed">
-                  {project.desc}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((t, j) => (
-                    <span key={j} className="font-mono text-[10px] md:text-xs px-2 py-1 border border-surface text-muted group-hover:border-accent/30 group-hover:text-fg transition-colors">
-                      {t}
-                    </span>
-                  ))}
+              <ScrollParallax key={i} offset={80} speed={i % 2 === 0 ? 1 : -0.5} className="h-full">
+                <div className="group border border-surface bg-surface/20 p-6 md:p-8 hover:border-accent transition-colors relative h-full">
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="absolute top-6 right-6 text-muted group-hover:text-accent transition-colors">
+                    <ExternalLink size={20} />
+                  </a>
+                  <h3 className="text-2xl md:text-3xl font-sans mb-4 pr-8">{project.title}</h3>
+                  <p className="font-mono text-sm md:text-base text-muted mb-8 leading-relaxed">
+                    {project.desc}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map((t, j) => (
+                      <span key={j} className="font-mono text-[10px] md:text-xs px-2 py-1 border border-surface text-muted group-hover:border-accent/30 group-hover:text-fg transition-colors">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </motion.div>
+              </ScrollParallax>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Experience */}
@@ -344,14 +350,11 @@ export default function Home() {
         <motion.div style={{ y: yExpBg }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           EXP
         </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10"
-        >
-          <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16 text-stroke">EXPERIENCE</h2>
+        
+        <div className="relative z-10">
+          <ScrollReveal direction="left">
+            <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16 text-stroke">EXPERIENCE</h2>
+          </ScrollReveal>
           
           <div className="space-y-0 border-t border-surface">
             {[
@@ -374,26 +377,21 @@ export default function Home() {
                 desc: "Designed secure modules improving system security by 30%. Implemented CI/CD pipelines and automated deployment workflows on AWS EC2."
               }
             ].map((job, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group border-b border-surface py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 hover:bg-surface transition-colors cursor-crosshair"
-              >
-                <div className="lg:col-span-3 font-mono text-xs md:text-sm text-muted pt-1 md:pt-2">
-                  {job.date}
+              <ScrollReveal direction="up" key={i}>
+                <div className="group border-b border-surface py-8 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 hover:bg-surface transition-colors cursor-crosshair">
+                  <div className="lg:col-span-3 font-mono text-xs md:text-sm text-muted pt-1 md:pt-2">
+                    {job.date}
+                  </div>
+                  <div className="lg:col-span-9">
+                    <h3 className="text-2xl md:text-4xl font-sans mb-1 md:mb-2 group-hover:text-accent transition-colors">{job.role}</h3>
+                    <h4 className="text-lg md:text-xl font-mono mb-4 md:mb-6 text-fg">{job.company}</h4>
+                    <p className="font-mono text-sm md:text-base text-muted max-w-3xl leading-relaxed">{job.desc}</p>
+                  </div>
                 </div>
-                <div className="lg:col-span-9">
-                  <h3 className="text-2xl md:text-4xl font-sans mb-1 md:mb-2 group-hover:text-accent transition-colors">{job.role}</h3>
-                  <h4 className="text-lg md:text-xl font-mono mb-4 md:mb-6 text-fg">{job.company}</h4>
-                  <p className="font-mono text-sm md:text-base text-muted max-w-3xl leading-relaxed">{job.desc}</p>
-                </div>
-              </motion.div>
+              </ScrollReveal>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Skills Matrix */}
@@ -401,42 +399,41 @@ export default function Home() {
         <motion.div style={{ y: ySkillsBg }} className="absolute top-10 left-0 text-[15vw] font-sans text-bg opacity-50 pointer-events-none select-none">
           TECH
         </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10"
-        >
-          <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">TECH_STACK</h2>
+        
+        <div className="relative z-10">
+          <ScrollReveal direction="up">
+            <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">TECH_STACK</h2>
+          </ScrollReveal>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <ScrollScale className="h-full">
               <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Cloud size={18} className="md:w-5 md:h-5"/> CLOUD & AWS</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['EC2', 'ECS Fargate', 'ECR', 'ALB', 'CloudWatch', 'CodeDeploy', 'IAM', 'S3', 'Lambda', 'EventBridge', 'VPC'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
                 ))}
               </ul>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            </ScrollScale>
+            
+            <ScrollScale className="h-full">
               <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Terminal size={18} className="md:w-5 md:h-5"/> IAC & AUTOMATION</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['Terraform', 'Docker', 'Docker Compose', 'GitHub Actions', 'Jenkins', 'Nginx', 'Strapi CMS'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
                 ))}
               </ul>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+            </ScrollScale>
+            
+            <ScrollScale className="h-full">
               <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Database size={18} className="md:w-5 md:h-5"/> PROGRAMMING & DB</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['Python', 'C / C++', 'JavaScript', 'Bash', 'SQL', 'PostgreSQL', 'MySQL', 'Linux / Unix'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
                 ))}
               </ul>
-            </motion.div>
+            </ScrollScale>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Footer */}

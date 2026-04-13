@@ -114,11 +114,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="noise-overlay z-10 pointer-events-none"></div>
       
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 mix-blend-difference pointer-events-none">
-        <Link to="/" className="font-sans text-xl md:text-2xl tracking-tighter pointer-events-auto">AKP<span className="text-accent">.</span></Link>
+      <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-bg/80 backdrop-blur-md border-b border-surface/50 shadow-sm transition-all duration-300">
+        <Link to="/" className="font-sans text-xl md:text-2xl tracking-tighter flex items-baseline">
+          AKP<span className="text-accent ml-1 animate-pulse">.</span>
+        </Link>
         
         {location.pathname === '/' && (
-          <div className="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest pointer-events-auto">
+          <div className="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest">
             <a href="#about" className="hover:text-accent transition-colors">About</a>
             <a href="#github" className="hover:text-accent transition-colors">GitHub</a>
             <a href="#projects" className="hover:text-accent transition-colors">Projects</a>
@@ -126,7 +128,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+        <div className="flex items-center gap-4 md:gap-6">
           <a href="https://www.linkedin.com/in/dityakp/" target="_blank" rel="noopener noreferrer" className="text-fg hover:text-accent transition-colors">
             <Linkedin size={20} />
           </a>
