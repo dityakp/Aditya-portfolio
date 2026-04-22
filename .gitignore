@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# AI and Graphify
+graphify-out/
+.agents/
+.gemini/
+GEMINI.md
