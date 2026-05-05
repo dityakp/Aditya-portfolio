@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Github, Linkedin, Terminal, Database, Cloud, Star, GitFork, ExternalLink, Download } from 'lucide-react';
+import { Github, Linkedin, Terminal, Database, Cloud, Star, GitFork, ExternalLink, Download, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { experiencesData } from '../data/experiences';
 // @ts-ignore
@@ -62,6 +62,18 @@ const ScrollScale: React.FC<ScrollScaleProps> = ({ children, className = "" }) =
 };
 
 export default function Home() {
+  // Restore scroll position when returning to Home
+  useLayoutEffect(() => {
+    const savedPos = sessionStorage.getItem('homeScrollY');
+    if (savedPos) {
+      // Use setTimeout to allow layout to settle before scrolling
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedPos, 10));
+      }, 50);
+    }
+    // Intentionally removed the unmount listener here because the exit 
+    // animation delays unmounting until after scroll has jumped to 0
+  }, []);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
 
@@ -78,6 +90,7 @@ export default function Home() {
   const yProjectsBg = useTransform(scrollYProgress, [0.3, 0.8], [0, 250]);
   const yExpBg = useTransform(scrollYProgress, [0.4, 0.9], [0, 200]);
   const ySkillsBg = useTransform(scrollYProgress, [0.6, 1], [0, 200]);
+  const yCertBg = useTransform(scrollYProgress, [0.7, 1], [0, 200]);
   const yFooterText = useTransform(scrollYProgress, [0.8, 1], [200, 0]);
 
 
@@ -194,8 +207,8 @@ export default function Home() {
 
       {/* About & Stats */}
       <section id="about" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
-        <motion.div style={{ y: yAboutBg, willChange: 'transform' }} className="absolute top-0 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
-          SYS
+        <motion.div style={{ y: yAboutBg, willChange: 'transform' }} className="absolute top-0 right-0 text-[15vw] font-sans text-surface opacity-30 pointer-events-none select-none">
+          ABOUT
         </motion.div>
         <ScrollReveal direction="up" className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
           <div className="lg:col-span-4">
@@ -230,8 +243,8 @@ export default function Home() {
 
       {/* GitHub Live Integration */}
       <section id="github" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
-        <motion.div style={{ y: yGithubBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
-          GIT
+        <motion.div style={{ y: yGithubBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-surface opacity-30 pointer-events-none select-none">
+          GITHUB
         </motion.div>
 
         <div className="relative z-10">
@@ -279,8 +292,8 @@ export default function Home() {
 
       {/* Projects */}
       <section id="projects" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
-        <motion.div style={{ y: yProjectsBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
-          PRJ
+        <motion.div style={{ y: yProjectsBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-30 pointer-events-none select-none">
+          PROJECTS
         </motion.div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
@@ -377,8 +390,8 @@ export default function Home() {
 
       {/* Experience */}
       <section id="experience" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
-        <motion.div style={{ y: yExpBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
-          EXP
+        <motion.div style={{ y: yExpBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[12vw] font-sans text-surface opacity-30 pointer-events-none select-none">
+          EXPERIENCE
         </motion.div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
@@ -438,7 +451,11 @@ export default function Home() {
 
 
                         <div className="flex justify-end mt-2 md:mt-4 relative z-20">
-                          <Link to={`/experience/${job.id}`} className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm md:text-base text-surface bg-accent px-3 py-2 md:px-6 md:py-3 hover:bg-white transition-colors group/btn">
+                          <Link 
+                            to={`/experience/${job.id}`} 
+                            onClick={() => sessionStorage.setItem('homeScrollY', window.scrollY.toString())}
+                            className="inline-flex items-center gap-2 font-mono text-xs sm:text-sm md:text-base text-surface bg-accent px-3 py-2 md:px-6 md:py-3 hover:bg-white transition-colors group/btn"
+                          >
                             EXPLORE DETAILS 
                             <span className="group-hover/btn:translate-x-1 transition-transform">-&gt;</span>
                           </Link>
@@ -455,7 +472,7 @@ export default function Home() {
 
       {/* Skills Matrix */}
       <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
-        <motion.div style={{ y: ySkillsBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-bg opacity-50 pointer-events-none select-none">
+        <motion.div style={{ y: ySkillsBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-bg opacity-60 pointer-events-none select-none">
           TECH
         </motion.div>
 
@@ -495,6 +512,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Certifications (Teaser) */}
+      <section id="certifications" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: yCertBg, willChange: 'transform' }} className="absolute top-10 right-0 text-[10vw] font-sans text-surface opacity-30 pointer-events-none select-none">
+          CERTIFICATIONS
+        </motion.div>
+
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+          <ScrollReveal direction="left" className="md:w-1/2">
+            <h2 className="text-4xl md:text-6xl font-sans mb-6">CERTIFICATIONS</h2>
+            <p className="font-mono text-muted text-sm md:text-base leading-relaxed mb-8 border-l-2 border-accent pl-4">
+              // Continuous learning<br />
+              // Verified expertise in Cloud & DevOps
+            </p>
+            <p className="font-mono text-fg/80 mb-8 max-w-lg">
+              I actively pursue industry-recognized certifications to validate my architectural knowledge and keep my skills sharp in rapidly evolving cloud ecosystems.
+            </p>
+            
+            <Link 
+              to="/certifications"
+              onClick={() => sessionStorage.setItem('homeScrollY', window.scrollY.toString())}
+              className="inline-flex items-center gap-4 bg-accent text-bg px-6 py-4 font-mono font-bold hover:bg-white transition-colors group"
+            >
+              VIEW ALL CREDENTIALS
+              <span className="group-hover:translate-x-2 transition-transform">-&gt;</span>
+            </Link>
+          </ScrollReveal>
+
+          <ScrollReveal direction="right" className="md:w-1/2 w-full">
+            <div className="border border-surface bg-surface/10 p-8 relative overflow-hidden group hover:border-accent/30 transition-colors">
+              {/* Decorative elements */}
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/5 blur-[50px] rounded-full group-hover:bg-accent/10 transition-colors"></div>
+              
+              <div className="flex justify-between items-start mb-12 relative z-10">
+                <Award size={32} className="text-accent" />
+                <span className="font-mono text-xs text-muted">SECURE_CREDENTIALS</span>
+              </div>
+              
+              <div className="space-y-4 relative z-10">
+                <div className="h-2 w-1/3 bg-surface rounded-full overflow-hidden">
+                  <div className="h-full bg-accent w-full animate-pulse"></div>
+                </div>
+                <div className="h-2 w-2/3 bg-surface rounded-full"></div>
+                <div className="h-2 w-1/2 bg-surface rounded-full"></div>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 bg-accent/90 backdrop-blur-md text-bg relative overflow-hidden z-20" style={{ transform: 'translateZ(0)' }}>
         <div className="relative z-10">
@@ -520,7 +586,7 @@ export default function Home() {
         </div>
 
         {/* Massive background text with Parallax */}
-        <motion.div style={{ y: yFooterText, willChange: 'transform' }} className="absolute -bottom-10 md:-bottom-20 -right-4 md:-right-10 text-[40vw] md:text-[30vw] font-sans text-bg opacity-20 pointer-events-none leading-none">
+        <motion.div style={{ y: yFooterText, willChange: 'transform' }} className="absolute -bottom-10 md:-bottom-20 -right-4 md:-right-10 text-[40vw] md:text-[30vw] font-sans text-bg opacity-30 pointer-events-none leading-none">
           AKP
         </motion.div>
       </footer>

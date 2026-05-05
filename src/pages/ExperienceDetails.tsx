@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ArrowLeft, ExternalLink, CalendarDays } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -6,6 +6,12 @@ import { experiencesData } from '../data/experiences';
 
 export default function ExperienceDetails() {
   const { id } = useParams();
+  
+  // Always scroll to top when opening a detail page
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
   const { scrollYProgress } = useScroll();
   const yHeaderBg = useTransform(scrollYProgress, [0, 1], [0, 300]);
 
@@ -30,8 +36,8 @@ export default function ExperienceDetails() {
   return (
     <div className="relative min-h-screen pt-32 pb-24 px-4 md:px-12">
       {/* Background decoration */}
-      <motion.div style={{ y: yHeaderBg }} className="fixed top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none z-0">
-        EXP_LOG
+      <motion.div style={{ y: yHeaderBg }} className="fixed top-20 right-0 text-[12vw] font-sans text-surface opacity-30 pointer-events-none select-none z-0">
+        EXPERIENCE
       </motion.div>
 
       <div className="relative z-10 max-w-7xl mx-auto">

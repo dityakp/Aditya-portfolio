@@ -324,7 +324,7 @@ export default function Admin() {
   return (
     <div className="min-h-screen pt-28 pb-24 px-4 sm:px-6 md:px-12 relative">
       {/* Background */}
-      <div className="fixed top-20 right-0 text-[12vw] font-sans text-surface opacity-10 pointer-events-none select-none z-0">
+      <div className="fixed top-20 right-0 text-[12vw] font-sans text-surface opacity-30 pointer-events-none select-none z-0">
         ADMIN
       </div>
 
