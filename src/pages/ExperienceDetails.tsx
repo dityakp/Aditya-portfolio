@@ -105,7 +105,7 @@ export default function ExperienceDetails() {
                 <div className="font-mono text-sm text-muted mb-3">Official Proofs</div>
                 <div className="space-y-3">
                   {exp.proofs.map((proof, j) => (
-                    <div key={j} className="group flex items-center justify-between p-3 border border-surface hover:border-accent/50 transition-colors cursor-pointer bg-bg">
+                    <a key={j} href={proof.docPath} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between p-3 border border-surface hover:border-accent/50 transition-colors cursor-pointer bg-bg">
                       <div className="flex items-center gap-3">
                         <div className="text-muted group-hover:text-accent transition-colors">
                           {proof.icon}
@@ -113,7 +113,7 @@ export default function ExperienceDetails() {
                         <span className="font-mono text-sm text-fg/80 group-hover:text-fg transition-colors">{proof.name}</span>
                       </div>
                       <ExternalLink size={14} className="text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>
