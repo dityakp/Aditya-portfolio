@@ -29,6 +29,13 @@
     background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 24px 24px;
     background-position: 0 0;
+    /* Touch device optimizations */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Safe area for notched devices (iPhone etc.) */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   h1,
@@ -84,4 +91,19 @@
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAA3ElEQVRoge3YMQ6DMBQE0Jn735lbcAnOwQ0oKFASOf7f+7YAaUajkRYJWmst7z6f5/X6/tftvu8ty7KkVFNK+fj+/b7EzLIsaZompdSSUstfP5dSSiml1JJzTmO/7/v+j+M4Tik1xkg55TRN07Rs27YcdxzHMU3TNC/LsixjjDHv+74v27Ztx77v+znnnMcYY8w55zTGGPO+7/uyLMuyruu6HsdxnHPOeYwxxpxzTmOMMeZ937dl27btOI7jnHPOY4wx5pxzGmOMMe/7vi/Lsizruq7rGGPM+77vy/8fA90vQUEqLCoAAAAASUVORK5CYII=");
   background-repeat: repeat;
   background-size: 50px 50px;
+}
+
+/* Firefox scrollbar (Firefox doesn't support ::-webkit-scrollbar) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #09090b;
+}
+
+/* Firefox-specific performance overrides */
+.is-firefox .backdrop-blur-sm,
+.is-firefox .backdrop-blur-md {
+  /* Firefox natively struggles with huge blurred areas during scroll.
+     Disabling the blur ensures 60fps, while keeping the background semi-transparent. */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
