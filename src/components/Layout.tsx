@@ -95,9 +95,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
     requestAnimationFrame(raf);
 
-    // Reset scroll on route change
-    lenis.scrollTo(0, { immediate: true });
-
     // Add Firefox class for CSS optimizations
     if (navigator.userAgent.includes('Firefox')) {
       document.documentElement.classList.add('is-firefox');
@@ -106,7 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return () => {
       lenis.destroy();
     };
-  }, [location.pathname]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg text-fg selection:bg-accent selection:text-bg relative">
@@ -138,6 +135,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <a href="#github" className="hover:text-accent transition-colors">GitHub</a>
             <a href="#projects" className="hover:text-accent transition-colors">Projects</a>
             <a href="#experience" className="hover:text-accent transition-colors">Experience</a>
+            <a href="#certifications" className="hover:text-accent transition-colors">Certifications</a>
           </div>
         )}
 
@@ -164,6 +162,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <a href="#github" onClick={() => setMobileMenuOpen(false)} className="font-mono text-2xl uppercase tracking-widest text-fg hover:text-accent transition-colors border-b border-surface pb-4">GitHub</a>
           <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="font-mono text-2xl uppercase tracking-widest text-fg hover:text-accent transition-colors border-b border-surface pb-4">Projects</a>
           <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="font-mono text-2xl uppercase tracking-widest text-fg hover:text-accent transition-colors border-b border-surface pb-4">Experience</a>
+          <a href="#certifications" onClick={() => setMobileMenuOpen(false)} className="font-mono text-2xl uppercase tracking-widest text-fg hover:text-accent transition-colors border-b border-surface pb-4">Certifications</a>
           <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="font-mono text-2xl uppercase tracking-widest text-accent hover:text-fg transition-colors border-b border-surface pb-4">Init Contact</Link>
         </div>
       )}

@@ -83,8 +83,8 @@ export default function Contact() {
 
       {/* Decorative background elements */}
       <div className="absolute top-1/4 right-10 w-96 h-96 border border-surface rounded-full opacity-20 animate-spin-slow pointer-events-none" style={{ animationDuration: '40s' }}></div>
-      <div className="absolute bottom-10 left-10 text-[20vw] font-sans text-surface opacity-10 pointer-events-none leading-none select-none">
-        01
+      <div className="absolute bottom-10 left-10 text-[15vw] font-sans text-surface opacity-30 pointer-events-none leading-none select-none">
+        CONTACT
       </div>
     </div>
   );
