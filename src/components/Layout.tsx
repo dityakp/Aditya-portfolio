@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Linkedin } from 'lucide-react';
 import Lenis from 'lenis';
@@ -16,17 +16,17 @@ const FluidBackground = () => {
         IMMEDIATE: false,
         AUTO: false,
         INTERVAL: 3000,
-        SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: 1024,
-        CAPTURE_RESOLUTION: 512,
-        DENSITY_DISSIPATION: 1.2, // Lower = lasts longer
-        VELOCITY_DISSIPATION: 0.8, // Lower = more fluid/wavy
-        PRESSURE: 0.1, // Lower = more swirly
-        PRESSURE_ITERATIONS: 20,
-        CURL: 15, // Higher = more waves and curls
+        SIM_RESOLUTION: 64,          // Lowered from 128 — 4x less GPU computation
+        DYE_RESOLUTION: 256,         // Lowered from 1024 — 16x less texture memory
+        CAPTURE_RESOLUTION: 256,     // Lowered from 512
+        DENSITY_DISSIPATION: 1.5,    // Higher = dissipates faster = less to render
+        VELOCITY_DISSIPATION: 1.0,   // Higher = less persistent trails
+        PRESSURE: 0.1,
+        PRESSURE_ITERATIONS: 8,      // Lowered from 20 — fewer solver passes per frame
+        CURL: 15,
         SPLAT_RADIUS: 0.4,
         SPLAT_FORCE: 6000,
-        SHADING: true,
+        SHADING: false,              // Disabled — saves a full-screen shader pass
         COLORFUL: false,
         COLOR_UPDATE_SPEED: 0,
         PAUSED: false,
@@ -37,7 +37,12 @@ const FluidBackground = () => {
       });
     }
 
+    // Throttle mousemove to ~30fps to reduce event dispatch overhead
+    let lastMove = 0;
     const handleMouseMove = (e: MouseEvent) => {
+      const now = performance.now();
+      if (now - lastMove < 32) return; // Skip if <32ms since last event
+      lastMove = now;
       if (canvasRef.current) {
         const event = new MouseEvent('mousemove', {
           clientX: e.clientX,
@@ -48,7 +53,7 @@ const FluidBackground = () => {
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -56,12 +61,12 @@ const FluidBackground = () => {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       className="fixed inset-0 w-full h-full z-0"
-      style={{ 
-        width: '100vw', 
-        height: '100vh', 
+      style={{
+        width: '100vw',
+        height: '100vh',
         pointerEvents: 'auto',
         filter: 'grayscale(100%) brightness(1.5) contrast(1.2)'
       }}
@@ -75,7 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
-      lerp: 0.05, // Lower value creates more inertia/smoothness
+      lerp: 0.1,  // Increased from 0.05 — fewer interpolation frames needed to converge
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
@@ -100,11 +105,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-bg text-fg selection:bg-accent selection:text-bg relative">
       {/* Soft Glowing Background Image */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <img 
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2564&auto=format&fit=crop" 
-          alt="Glowing Background" 
+      <div className="fixed inset-0 z-0 pointer-events-none" style={{ willChange: 'auto' }}>
+        <img
+          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=60&w=1280&auto=format&fit=crop"
+          alt="Glowing Background"
           className="w-full h-full object-cover opacity-[0.15] mix-blend-screen"
+          loading="lazy"
+          decoding="async"
         />
         {/* Gradient overlay to ensure text remains readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-bg/80 via-bg/90 to-bg"></div>
@@ -112,13 +119,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <FluidBackground />
       <div className="noise-overlay z-10 pointer-events-none"></div>
-      
+
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-bg/80 backdrop-blur-md border-b border-surface/50 shadow-sm transition-all duration-300">
+      <nav className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-bg/80 backdrop-blur-md border-b border-surface/50 shadow-sm transition-all duration-300" style={{ willChange: 'backdrop-filter', transform: 'translateZ(0)' }}>
         <Link to="/" className="font-sans text-xl md:text-2xl tracking-tighter flex items-baseline">
           AKP<span className="text-accent ml-1 animate-pulse">.</span>
         </Link>
-        
+
         {location.pathname === '/' && (
           <div className="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest">
             <a href="#about" className="hover:text-accent transition-colors">About</a>
