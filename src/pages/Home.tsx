@@ -2,9 +2,29 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Github, Linkedin, Terminal, Database, Cloud, Star, GitFork, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+// @ts-ignore
 import avatarImg from '../assets/avatar.png';
 
-const ScrollParallax = ({ children, offset = 50, direction = 'y', speed = 1, className = "" }: { children: React.ReactNode, offset?: number, direction?: 'y' | 'x', speed?: number, className?: string }) => {
+interface ScrollParallaxProps {
+  children: React.ReactNode;
+  offset?: number;
+  direction?: 'y' | 'x';
+  speed?: number;
+  className?: string;
+}
+
+interface ScrollRevealProps {
+  children: React.ReactNode;
+  direction?: 'up' | 'left' | 'right';
+  className?: string;
+}
+
+interface ScrollScaleProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const ScrollParallax: React.FC<ScrollParallaxProps> = ({ children, offset = 50, direction = 'y', speed = 1, className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const transform = useTransform(scrollYProgress, [0, 1], [offset * speed, -offset * speed]);
@@ -15,7 +35,7 @@ const ScrollParallax = ({ children, offset = 50, direction = 'y', speed = 1, cla
   );
 };
 
-const ScrollReveal = ({ children, direction = 'up', className = "" }: { children: React.ReactNode, direction?: 'up' | 'left' | 'right', className?: string }) => {
+const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, direction = 'up', className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
   const y = direction === 'up' ? useTransform(scrollYProgress, [0, 1], [100, 0]) : 0;
@@ -28,7 +48,7 @@ const ScrollReveal = ({ children, direction = 'up', className = "" }: { children
   );
 };
 
-const ScrollScale = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+const ScrollScale: React.FC<ScrollScaleProps> = ({ children, className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
