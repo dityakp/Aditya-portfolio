@@ -1,43 +1,60 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { Github, Linkedin, Terminal, Database, Cloud, Star, GitFork, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+// @ts-ignore
 import avatarImg from '../assets/avatar.png';
 
-const ScrollParallax = ({ children, offset = 50, direction = 'y', speed = 1, className = "" }: { children: React.ReactNode, offset?: number, direction?: 'y' | 'x', speed?: number, className?: string }) => {
+interface ScrollParallaxProps {
+  children: React.ReactNode;
+  offset?: number;
+  direction?: 'y' | 'x';
+  speed?: number;
+  className?: string;
+}
+
+interface ScrollRevealProps {
+  children: React.ReactNode;
+  direction?: 'up' | 'left' | 'right';
+  className?: string;
+}
+
+interface ScrollScaleProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const ScrollParallax: React.FC<ScrollParallaxProps> = ({ children, offset = 50, direction = 'y', speed = 1, className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
-  const transform = useTransform(smooth, [0, 1], [offset * speed, -offset * speed]);
+  const transform = useTransform(scrollYProgress, [0, 1], [offset * speed, -offset * speed]);
   return (
-    <motion.div ref={ref} style={{ [direction]: transform }} className={className}>
+    <motion.div ref={ref} style={{ [direction]: transform, willChange: 'transform' }} className={className}>
       {children}
     </motion.div>
   );
 };
 
-const ScrollReveal = ({ children, direction = 'up', className = "" }: { children: React.ReactNode, direction?: 'up' | 'left' | 'right', className?: string }) => {
+const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, direction = 'up', className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
-  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
-  const y = direction === 'up' ? useTransform(smooth, [0, 1], [100, 0]) : 0;
-  const x = direction === 'left' ? useTransform(smooth, [0, 1], [-100, 0]) : direction === 'right' ? useTransform(smooth, [0, 1], [100, 0]) : 0;
-  const opacity = useTransform(smooth, [0, 1], [0, 1]);
+  const y = direction === 'up' ? useTransform(scrollYProgress, [0, 1], [100, 0]) : 0;
+  const x = direction === 'left' ? useTransform(scrollYProgress, [0, 1], [-100, 0]) : direction === 'right' ? useTransform(scrollYProgress, [0, 1], [100, 0]) : 0;
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   return (
-    <motion.div ref={ref} style={{ x, y, opacity }} className={className}>
+    <motion.div ref={ref} style={{ x, y, opacity, willChange: 'transform, opacity' }} className={className}>
       {children}
     </motion.div>
   );
 };
 
-const ScrollScale = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+const ScrollScale: React.FC<ScrollScaleProps> = ({ children, className = "" }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "center center"] });
-  const smooth = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
-  const scale = useTransform(smooth, [0, 1], [0.8, 1]);
-  const opacity = useTransform(smooth, [0, 1], [0.3, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
   return (
-    <motion.div ref={ref} style={{ scale, opacity }} className={className}>
+    <motion.div ref={ref} style={{ scale, opacity, willChange: 'transform, opacity' }} className={className}>
       {children}
     </motion.div>
   );
@@ -56,23 +73,21 @@ interface Repo {
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
-  
-  // Smooth out the scroll progress for parallax effects
-  const smoothProgress = useSpring(scrollYProgress, { damping: 15, stiffness: 100 });
-  
+
+  // Direct transforms without useSpring — eliminates per-frame spring solver overhead
   // Parallax transforms for Hero
-  const yHeroText = useTransform(smoothProgress, [0, 1], [0, 600]);
-  const yAvatar = useTransform(smoothProgress, [0, 1], [0, 1000]);
-  const rotateAvatar = useTransform(smoothProgress, [0, 1], [0, 60]);
-  const opacityHero = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+  const yHeroText = useTransform(scrollYProgress, [0, 1], [0, 600]);
+  const yAvatar = useTransform(scrollYProgress, [0, 1], [0, 1000]);
+  const rotateAvatar = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const opacityHero = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   // Parallax transforms for other sections
-  const yAboutBg = useTransform(smoothProgress, [0, 0.5], [0, 200]);
-  const yGithubBg = useTransform(smoothProgress, [0.2, 0.7], [0, 300]);
-  const yProjectsBg = useTransform(smoothProgress, [0.3, 0.8], [0, 250]);
-  const yExpBg = useTransform(smoothProgress, [0.4, 0.9], [0, 200]);
-  const ySkillsBg = useTransform(smoothProgress, [0.6, 1], [0, 200]);
-  const yFooterText = useTransform(smoothProgress, [0.8, 1], [200, 0]);
+  const yAboutBg = useTransform(scrollYProgress, [0, 0.5], [0, 200]);
+  const yGithubBg = useTransform(scrollYProgress, [0.2, 0.7], [0, 300]);
+  const yProjectsBg = useTransform(scrollYProgress, [0.3, 0.8], [0, 250]);
+  const yExpBg = useTransform(scrollYProgress, [0.4, 0.9], [0, 200]);
+  const ySkillsBg = useTransform(scrollYProgress, [0.6, 1], [0, 200]);
+  const yFooterText = useTransform(scrollYProgress, [0.8, 1], [200, 0]);
 
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loadingRepos, setLoadingRepos] = useState(true);
@@ -97,8 +112,8 @@ export default function Home() {
     <div ref={containerRef} className="relative">
       {/* Hero Section */}
       <section className="relative h-[100svh] flex flex-col justify-center px-4 md:px-12 pt-20 overflow-hidden">
-        <motion.div style={{ y: yHeroText, opacity: opacityHero }} className="z-20 relative">
-          <motion.h1 
+        <motion.div style={{ y: yHeroText, opacity: opacityHero, willChange: 'transform, opacity' }} className="z-20 relative">
+          <motion.h1
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -106,7 +121,7 @@ export default function Home() {
           >
             ADITYA
           </motion.h1>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -114,7 +129,7 @@ export default function Home() {
           >
             KUMAR
           </motion.h1>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -125,8 +140,8 @@ export default function Home() {
         </motion.div>
 
         {/* Avatar Parallax */}
-        <motion.div 
-          style={{ y: yAvatar, rotate: rotateAvatar }}
+        <motion.div
+          style={{ y: yAvatar, rotate: rotateAvatar, willChange: 'transform' }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -135,7 +150,7 @@ export default function Home() {
           <img src={avatarImg} alt="Aditya Kumar Prasad" className="w-full h-full object-cover" />
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
@@ -144,15 +159,15 @@ export default function Home() {
           <p className="mb-2 text-fg">DEVSEC<span className="text-accent">OPS</span> & CLOUD ENGINEER</p>
           <p>Automating the boring. Scaling the important. Building cloud systems that scale reliably.</p>
         </motion.div>
-        
+
         {/* Decorative elements */}
         <div className="absolute top-1/4 right-1/4 w-32 h-32 md:w-64 md:h-64 border border-surface rounded-full opacity-20 animate-spin-slow" style={{ animationDuration: '20s' }}></div>
       </section>
 
       {/* Marquee */}
       <div className="w-full bg-accent text-bg py-3 md:py-4 overflow-hidden flex whitespace-nowrap border-y border-bg relative z-20">
-        <motion.div 
-          animate={{ x: [0, -1035] }} 
+        <motion.div
+          animate={{ x: [0, -1035] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 10 }}
           className="font-sans text-xl md:text-2xl uppercase flex gap-4 md:gap-8"
         >
@@ -174,8 +189,8 @@ export default function Home() {
       </div>
 
       {/* About & Stats */}
-      <section id="about" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden">
-        <motion.div style={{ y: yAboutBg }} className="absolute top-0 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
+      <section id="about" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: yAboutBg, willChange: 'transform' }} className="absolute top-0 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           SYS
         </motion.div>
         <ScrollReveal direction="up" className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
@@ -191,7 +206,7 @@ export default function Home() {
             <p>
               Final-year BCA student building expertise in DevOps, Cloud, and Automation. I've shipped production-grade infrastructure on AWS — from containerized deployments to zero-downtime CI/CD pipelines.
             </p>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mt-12 md:mt-16">
               {[
                 { val: "3", label: "Internships" },
@@ -210,11 +225,11 @@ export default function Home() {
       </section>
 
       {/* GitHub Live Integration */}
-      <section id="github" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden">
-        <motion.div style={{ y: yGithubBg }} className="absolute top-10 left-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
+      <section id="github" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: yGithubBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           GIT
         </motion.div>
-        
+
         <div className="relative z-10">
           <ScrollReveal direction="left" className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6">
             <div>
@@ -234,9 +249,9 @@ export default function Home() {
             <ScrollScale className="lg:col-span-12 border border-surface bg-bg p-4 md:p-8">
               <h3 className="font-mono text-xs md:text-sm text-muted mb-4 md:mb-6 uppercase tracking-widest">Contribution Heatmap</h3>
               <div className="w-full overflow-x-auto pb-4">
-                <img 
-                  src="https://ghchart.rshah.org/ccff00/dityakp" 
-                  alt="Aditya's GitHub Contributions" 
+                <img
+                  src="https://ghchart.rshah.org/ccff00/dityakp"
+                  alt="Aditya's GitHub Contributions"
                   className="min-w-[600px] md:min-w-[700px] w-full opacity-90 hover:opacity-100 transition-opacity"
                 />
               </div>
@@ -285,41 +300,35 @@ export default function Home() {
       </section>
 
       {/* Projects */}
-      <section id="projects" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden">
-        <motion.div style={{ y: yProjectsBg }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
+      <section id="projects" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: yProjectsBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           PRJ
         </motion.div>
-        
+
         <div className="relative z-10">
           <ScrollReveal direction="up">
             <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">PROJECTS</h2>
           </ScrollReveal>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {[
               {
-                title: "Cloud Infrastructure Automation",
-                desc: "Automated AWS infrastructure provisioning using Terraform. Set up VPCs, EC2 instances, RDS databases, and load balancers with zero manual intervention.",
-                tech: ["Terraform", "AWS", "Bash", "GitHub Actions"],
-                link: "https://github.com/dityakp"
+                title: "ScamShield — AI-ML Scam Detection",
+                desc: "Trained a machine learning model on 2M+ text records using TF-IDF and Logistic Regression, deployed on AWS EC2. Containerized with Docker, reducing setup time by 30%. Implemented CI/CD via GitHub Actions, cutting manual deployment effort by 40%.",
+                tech: ["AI", "ML", "AWS", "Docker", "GitHub Actions", "PostgreSQL"],
+                link: "https://github.com/dityakp/ScamShield"
               },
               {
-                title: "Microservices Deployment",
-                desc: "Containerized a monolithic application into microservices using Docker. Orchestrated deployments with Kubernetes, ensuring high availability and scalability.",
-                tech: ["Docker", "Kubernetes", "Node.js", "AWS EKS"],
-                link: "https://github.com/dityakp"
+                title: "Blue/Green Deployment — Strapi CMS",
+                desc: "Architected container-based CMS deployment using Docker, ECS Fargate, and Application Load Balancer. Provisioned AWS networking (VPC, subnets, security groups) with Terraform. Configured traffic shifting via AWS CodeDeploy with automated Docker image lifecycle.",
+                tech: ["AWS", "Terraform", "Docker", "ECS Fargate", "CodeDeploy", "GitHub Actions"],
+                link: "https://github.com/dityakp/strapi-application-ecs-fargate"
               },
               {
-                title: "CI/CD Pipeline Optimization",
-                desc: "Redesigned CI/CD pipelines to reduce build times by 40%. Implemented automated testing, security scanning, and blue/green deployments.",
-                tech: ["Jenkins", "GitLab CI", "SonarQube", "ArgoCD"],
-                link: "https://github.com/dityakp"
-              },
-              {
-                title: "Serverless Data Pipeline",
-                desc: "Built a serverless data processing pipeline using AWS Lambda, S3, and DynamoDB to handle real-time log analysis and alerting.",
-                tech: ["AWS Lambda", "Python", "DynamoDB", "CloudWatch"],
-                link: "https://github.com/dityakp"
+                title: "Event-Driven Reporting Pipeline",
+                desc: "Developed a serverless event-driven processing system using AWS Lambda and EventBridge. Automated scheduled report generation with structured S3 storage workflow. Provisioned all infrastructure via Terraform and monitored with CloudWatch.",
+                tech: ["AWS", "Lambda", "EventBridge", "S3", "Terraform", "CloudWatch"],
+                link: "https://github.com/dityakp/event-driven-reporting-pipeline"
               }
             ].map((project, i) => (
               <ScrollParallax key={i} offset={80} speed={i % 2 === 0 ? 1 : -0.5} className="h-full">
@@ -346,16 +355,16 @@ export default function Home() {
       </section>
 
       {/* Experience */}
-      <section id="experience" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden">
-        <motion.div style={{ y: yExpBg }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
+      <section id="experience" className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-bg/70 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: yExpBg, willChange: 'transform' }} className="absolute top-20 right-0 text-[15vw] font-sans text-surface opacity-10 pointer-events-none select-none">
           EXP
         </motion.div>
-        
+
         <div className="relative z-10">
           <ScrollReveal direction="left">
             <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16 text-stroke">EXPERIENCE</h2>
           </ScrollReveal>
-          
+
           <div className="space-y-0 border-t border-surface">
             {[
               {
@@ -395,37 +404,37 @@ export default function Home() {
       </section>
 
       {/* Skills Matrix */}
-      <section className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden">
-        <motion.div style={{ y: ySkillsBg }} className="absolute top-10 left-0 text-[15vw] font-sans text-bg opacity-50 pointer-events-none select-none">
+      <section className="py-24 md:py-32 px-4 md:px-12 border-b border-surface relative z-20 bg-surface/30 backdrop-blur-sm overflow-hidden" style={{ transform: 'translateZ(0)' }}>
+        <motion.div style={{ y: ySkillsBg, willChange: 'transform' }} className="absolute top-10 left-0 text-[15vw] font-sans text-bg opacity-50 pointer-events-none select-none">
           TECH
         </motion.div>
-        
+
         <div className="relative z-10">
           <ScrollReveal direction="up">
             <h2 className="text-5xl md:text-8xl font-sans mb-12 md:mb-16">TECH_STACK</h2>
           </ScrollReveal>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
             <ScrollScale className="h-full">
-              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Cloud size={18} className="md:w-5 md:h-5"/> CLOUD & AWS</h3>
+              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Cloud size={18} className="md:w-5 md:h-5" /> CLOUD & AWS</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['EC2', 'ECS Fargate', 'ECR', 'ALB', 'CloudWatch', 'CodeDeploy', 'IAM', 'S3', 'Lambda', 'EventBridge', 'VPC'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
                 ))}
               </ul>
             </ScrollScale>
-            
+
             <ScrollScale className="h-full">
-              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Terminal size={18} className="md:w-5 md:h-5"/> IAC & AUTOMATION</h3>
+              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Terminal size={18} className="md:w-5 md:h-5" /> IAC & AUTOMATION</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['Terraform', 'Docker', 'Docker Compose', 'GitHub Actions', 'Jenkins', 'Nginx', 'Strapi CMS'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
                 ))}
               </ul>
             </ScrollScale>
-            
+
             <ScrollScale className="h-full">
-              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Database size={18} className="md:w-5 md:h-5"/> PROGRAMMING & DB</h3>
+              <h3 className="text-lg md:text-xl font-sans text-accent mb-4 md:mb-6 flex items-center gap-2"><Database size={18} className="md:w-5 md:h-5" /> PROGRAMMING & DB</h3>
               <ul className="font-mono text-sm md:text-base space-y-2 text-muted">
                 {['Python', 'C / C++', 'JavaScript', 'Bash', 'SQL', 'PostgreSQL', 'MySQL', 'Linux / Unix'].map(s => (
                   <li key={s} className="hover:text-fg hover:translate-x-2 transition-transform cursor-default">_ {s}</li>
@@ -437,13 +446,13 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-24 md:py-32 px-4 md:px-12 bg-accent/90 backdrop-blur-md text-bg relative overflow-hidden z-20">
+      <footer className="py-24 md:py-32 px-4 md:px-12 bg-accent/90 backdrop-blur-md text-bg relative overflow-hidden z-20" style={{ transform: 'translateZ(0)' }}>
         <div className="relative z-10">
           <h2 className="text-3xl md:text-6xl font-sans mb-6 md:mb-8">READY TO DEPLOY?</h2>
           <Link to="/contact" className="block text-[12vw] md:text-[8vw] leading-none font-sans hover:text-surface transition-colors mb-12 md:mb-16">
             INITIATE
           </Link>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 font-mono text-xs md:text-sm font-bold">
             <div className="flex flex-wrap gap-4 md:gap-6">
               <a href="https://github.com/dityakp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:underline">
@@ -459,9 +468,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
+
         {/* Massive background text with Parallax */}
-        <motion.div style={{ y: yFooterText }} className="absolute -bottom-10 md:-bottom-20 -right-4 md:-right-10 text-[40vw] md:text-[30vw] font-sans text-bg opacity-20 pointer-events-none leading-none">
+        <motion.div style={{ y: yFooterText, willChange: 'transform' }} className="absolute -bottom-10 md:-bottom-20 -right-4 md:-right-10 text-[40vw] md:text-[30vw] font-sans text-bg opacity-20 pointer-events-none leading-none">
           AKP
         </motion.div>
       </footer>

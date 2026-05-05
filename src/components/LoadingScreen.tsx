@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 
-export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
+interface LoadingScreenProps {
+  onComplete: () => void;
+}
+
+const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [text, setText] = useState('INITIALIZING_SYSTEM...');
 
@@ -49,4 +53,6 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       </div>
     </motion.div>
   );
-}
+};
+
+export default LoadingScreen;
